@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1376" height="768" viewBox="0 0 1376 768" role="img" aria-label="CityDent - AI Dental Assistant">
+  <title>CityDent — AI Dental Assistant</title>
+  <defs>
+    <!-- Degradado de la burbuja: azul -> turquesa (vertical, coords de usuario = sin costura) -->
+    <linearGradient id="bubbleGrad" gradientUnits="userSpaceOnUse" x1="266" y1="205" x2="266" y2="556">
+      <stop offset="0" stop-color="#5AAEE0"/>
+      <stop offset="1" stop-color="#38C3C4"/>
+    </linearGradient>
+    <!-- Degradado de "Dent": azul -> turquesa (horizontal) -->
+    <linearGradient id="dentGrad" gradientUnits="userSpaceOnUse" x1="820" y1="0" x2="1275" y2="0">
+      <stop offset="0" stop-color="#1D91E4"/>
+      <stop offset="1" stop-color="#26BDC6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ===== Marca gráfica: burbuja de chat con diente ===== -->
+  <g id="mark">
+    <!-- Cuerpo circular de la burbuja: centro (266,375) r=164 -->
+    <path id="bubble-body" fill="url(#bubbleGrad)" d="M266,211
+      C356.6,211 430,284.4 430,375
+      C430,465.6 356.6,539 266,539
+      C175.4,539 102,465.6 102,375
+      C102,284.4 175.4,211 266,211 Z"/>
+    <!-- Cola: pico pequeño hacia abajo-derecha (punta ~429,552) -->
+    <path id="bubble-tail" fill="url(#bubbleGrad)" d="M372,492
+      C398,512 420,534 429,552
+      C406,546 372,538 340,528
+      C356,516 366,504 372,492 Z"/>
+    <!-- Diente: molar ancho, corona amplia con escote poco profundo, raíces cortas y redondeadas -->
+    <path id="tooth" fill="#FFFFFF" d="M210,270
+      C232,266 254,276 276,289
+      C298,276 320,264 332,268
+      C356,272 372,296 379,326
+      C384,352 380,384 372,410
+      C366,428 360,440 356,452
+      C350,470 340,484 324,487
+      C312,488 306,478 302,462
+      C296,444 288,432 272,432
+      C256,432 248,444 242,462
+      C238,478 232,488 220,487
+      C204,484 194,470 188,452
+      C184,440 178,428 172,410
+      C164,384 160,352 165,326
+      C172,296 188,272 210,270 Z"/>
+  </g>
+
+  <!-- ===== Logotipo tipográfico (Futura = geométrica más fiel a la base) ===== -->
+  <g id="wordmark" font-family="'Futura Md BT','Futura','Century Gothic',sans-serif" font-weight="400">
+    <text x="470" y="440" font-size="203" letter-spacing="1">
+      <tspan fill="#0C2641">City</tspan><tspan fill="url(#dentGrad)">Dent</tspan>
+    </text>
+  </g>
+  <text id="tagline" x="492" y="506"
+        font-family="'Futura Bk BT','Futura','Century Gothic',sans-serif"
+        font-weight="400" font-size="47" letter-spacing="15" fill="#494D56">AI DENTAL ASSISTANT</text>
+</svg>
