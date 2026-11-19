@@ -1,0 +1,199 @@
+---
+/**
+ * Escena 12 (§3.12): manejo de objeciones en acordeón accesible.
+ * Ordenadas por peso de objeción: sustitución, alcance, miedo clínico,
+ * confianza, citas, reserva por WhatsApp, quién recibe las citas, canales,
+ * integración, disponibilidad, error, precio, pago, prueba, salida y
+ * permanencia. Las dos FAQ de reserva cierran los malentendidos más caros:
+ * que se pueda reservar por WhatsApp y que las citas se repartan entre
+ * varios profesionales.
+ */
+const faqs = [
+  {
+    q: '¿CityDent sustituye a recepción?',
+    a: 'No. Apoya la atención de consultas repetitivas y facilita información. Tu equipo sigue siendo esencial para el trato personal, las situaciones particulares y las decisiones de la clínica.',
+  },
+  {
+    q: '¿Qué preguntas puede responder?',
+    a: 'Las de horarios, ubicación, servicios e información práctica que haya facilitado tu clínica. El alcance se configura y se revisa contigo antes de la puesta en marcha.',
+  },
+  {
+    q: '¿Puede diagnosticar o recomendar tratamientos?',
+    a: 'No debe usarse para diagnosticar, valorar síntomas ni recomendar tratamientos personalizados. La atención clínica corresponde a profesionales sanitarios.',
+  },
+  {
+    q: '¿Por qué debería confiar una IA a mis pacientes?',
+    a: 'Porque responde con la información revisada de tu clínica, reconoce sus límites y te enseña ambos antes de decidir: puedes interrogarlo tú mismo en la demo de esta página.',
+  },
+  {
+    q: '¿Puede reservar citas directamente?',
+    a: 'Sí, en el widget de tu web. Con tu agenda conectada, consulta las horas que quedan libres, te propone una y el paciente la confirma con un botón; el asistente nunca escribe en tu agenda por su cuenta. Sin agenda conectada, explica cómo reservar y entrega tu enlace de reservas. Cambiar o cancelar una cita sigue haciéndolo tu equipo.',
+  },
+  {
+    q: '¿Puede reservar por WhatsApp?',
+    a: 'No. En WhatsApp responde con la información de tu clínica; la reserva con hora real funciona en el widget de tu web.',
+  },
+  {
+    q: '¿Quién recibe las citas?',
+    a: 'Hoy, un profesional por asistente: las citas caen en su calendario y de su hueco libre salen las horas. Si necesitas repartirlas entre varios, dínoslo y lo revisamos.',
+  },
+  {
+    q: '¿Funciona en WhatsApp y en mi web?',
+    a: 'Puede configurarse en ambos canales según los módulos contratados. WhatsApp requiere activación y está sujeto a las condiciones del servicio; revisamos requisitos contigo antes de la puesta en marcha.',
+  },
+  {
+    q: '¿Se integra con mi programa de gestión dental?',
+    a: 'Hoy conectamos Easy!Appointments, una agenda de código abierto que aprovisionamos y mantenemos nosotros para tu clínica. No integramos Clinic Cloud, Gesden, Dentasys ni similares: si ya usas uno, revisamos contigo si tiene sentido mantenerlo en paralelo. Dinos qué programa usas y te lo decimos con claridad antes de presupuestar nada.',
+  },
+  {
+    q: '¿Responde fuera del horario de la clínica?',
+    a: 'Puede atender consultas sin que haya nadie de recepción conectado, siempre que el servicio y el canal estén operativos. Eso no equivale a equipo humano disponible fuera de horario ni a un servicio de urgencias.',
+  },
+  {
+    q: '¿Qué pasa si no sabe algo?',
+    a: 'Lo configuramos para reconocer sus límites e indicar cómo contactar con la clínica. Como cualquier sistema de IA, puede equivocarse: por eso existen la revisión de contenido y las pruebas previas.',
+  },
+  {
+    q: '¿Cómo se calcula el precio?',
+    a: 'La propuesta desglosa la cuota mensual según módulos y, cuando corresponda, agendas; más una implementación de pago único con anticipo del 50 %. Incluye impuestos, consumo incluido y posibles costes externos.',
+  },
+  {
+    q: '¿Qué pago para empezar?',
+    a: 'El anticipo del 50 % de la implementación. Antes de contratar recibes el calendario de pagos completo, incluido el 50 % restante y el inicio de la mensualidad.',
+  },
+  {
+    q: '¿Puedo probarlo antes de contratar?',
+    a: 'Sí, en la demo de esta página, con una clínica ficticia y una agenda de ejemplo: puedes llegar hasta el final y reservar una hora de prueba en esa agenda. Probarla no activa suscripciones ni servicios.',
+  },
+  {
+    q: '¿Qué pasa con mis datos si dejo el servicio?',
+    a: 'Lo acordamos en el contrato antes de la puesta en marcha: exportación de tus contenidos y supresión de datos en los plazos pactados.',
+  },
+  {
+    q: '¿Hay permanencia o puedo cambiar módulos?',
+    a: 'Las condiciones de duración, cambios y cancelación se detallan en tu propuesta antes de contratar. No tendrás que deducirlas de un precio anunciado.',
+  },
+];
+---
+
+<section id="preguntas" class="band bg-ink/[0.03] text-ink">
+  <div class="shell shell-narrow">
+    <h2 class="heading-section" data-reveal="mask">Preguntas frecuentes</h2>
+    <p class="prose-measure mt-5 text-mist" data-reveal="up">
+      Las dudas reales de quienes evalúan un asistente de IA para su clínica,
+      respondidas sin rodeos.
+    </p>
+
+    <div class="mt-12" data-reveal="list" data-faq>
+      {faqs.map((faq, index) => (
+        <div data-reveal-item class="faq-item border-t border-ink/12 last:border-b" data-open="false">
+          <h3>
+            <button
+              type="button"
+              class="faq-trigger flex w-full items-start justify-between gap-6 py-5 text-left"
+              aria-expanded="false"
+              aria-controls={`faq-panel-${index}`}
+              id={`faq-trigger-${index}`}
+            >
+              <span class="font-display text-lg font-medium text-ink md:text-xl">{faq.q}</span>
+              <span class="faq-icon mt-1 flex-none" aria-hidden="true">
+                <svg class="h-4 w-4 text-brand-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" d="M5 12h14M12 5v14" />
+                </svg>
+              </span>
+            </button>
+          </h3>
+          <div class="faq-panel" id={`faq-panel-${index}`} role="region" aria-labelledby={`faq-trigger-${index}`}>
+            <div>
+              <p class="pb-6 text-base leading-relaxed text-mist md:text-[1.0625rem]">{faq.a}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 rounded-[1.3rem] border border-ink/12 bg-paper p-6 md:p-7" data-reveal="up">
+      <p class="text-lg leading-relaxed text-ink">
+        ¿Te queda alguna duda? Pregúntanoslo directamente: respondemos con los
+        detalles de tu caso, no con un folleto.
+      </p>
+      <a
+        href="#contacto"
+        class="mt-5 inline-flex rounded-full border border-ink/25 px-6 py-3 font-semibold text-ink transition-colors hover:border-brand-deep hover:text-brand-deep"
+      >
+        Solicitar propuesta
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-trigger {
+    transition: color 0.18s ease;
+  }
+
+  .faq-trigger:hover span:first-child {
+    color: var(--color-brand-deep);
+  }
+
+  .faq-icon {
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .faq-item[data-open='true'] .faq-icon {
+    transform: rotate(135deg);
+  }
+
+  /* Altura animada sin JS de medición: 0fr -> 1fr sobre una rejilla. */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s linear 0.38s;
+  }
+
+  .faq-item[data-open='true'] .faq-panel {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition:
+      grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0s;
+  }
+
+  .faq-panel > div {
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-panel,
+    .faq-item[data-open='true'] .faq-panel,
+    .faq-icon {
+      transition-delay: 0s;
+    }
+  }
+</style>
+
+<script>
+  /* Un sólo acordeón abierto: la lista se explora sin perder el hilo. */
+  const root = document.querySelector<HTMLElement>('[data-faq]');
+
+  const setOpen = (item: HTMLElement, open: boolean) => {
+    item.dataset.open = String(open);
+    const trigger = item.querySelector<HTMLButtonElement>('.faq-trigger');
+    trigger?.setAttribute('aria-expanded', String(open));
+  };
+
+  root?.addEventListener('click', (event) => {
+    const trigger = (event.target as HTMLElement).closest<HTMLButtonElement>('.faq-trigger');
+    if (!trigger || !root.contains(trigger)) return;
+
+    const item = trigger.closest<HTMLElement>('.faq-item');
+    if (!item) return;
+
+    const willOpen = item.dataset.open !== 'true';
+    root.querySelectorAll<HTMLElement>('.faq-item').forEach((other) => setOpen(other, false));
+    setOpen(item, willOpen);
+  });
+</script>

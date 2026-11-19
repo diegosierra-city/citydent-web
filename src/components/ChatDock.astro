@@ -1,0 +1,97 @@
+---
+/**
+ * ChatDock — integra el widget del chatbot CityDent (cc-widget.js).
+ *
+ * El widget ya se autogestiona (crea su propio FAB e inyecta sus estilos),
+ * así que aquí sólo se encarga de cargar el script con el public-id correcto.
+ *
+ * Estrategias de carga:
+ *  - 'idle'   : espera a que el navegador esté ocioso (mejor LCP). Por defecto.
+ *  - 'eager'  : carga diferida inmediata, equivalente a `defer`.
+ *
+ * Configura el origen con la variable de entorno PUBLIC_CHAT_WIDGET_URL
+ * y el identificador con PUBLIC_CHAT_WIDGET_ID (archivo .env / .env.production).
+ */
+
+interface Props {
+  /** URL del cc-widget.js. Si se omite usa PUBLIC_CHAT_WIDGET_URL. */
+  src?: string;
+  /** public-id entregado por la plataforma. Si se omite usa PUBLIC_CHAT_WIDGET_ID. */
+  publicId?: string;
+  loadStrategy?: 'idle' | 'eager';
+}
+
+const {
+  src = import.meta.env.PUBLIC_CHAT_WIDGET_URL ?? '/cc-widget.js',
+  publicId = import.meta.env.PUBLIC_CHAT_WIDGET_ID ?? '',
+  loadStrategy = 'idle',
+} = Astro.props;
+---
+
+{publicId && (
+  <div
+    id="chat-dock"
+    data-src={src}
+    data-public-id={publicId}
+    data-strategy={loadStrategy}
+  ></div>
+)}
+
+<!--
+  El script se emite siempre: mountChat() sale early si #chat-dock no existe
+  (es decir, si no hay PUBLIC_CHAT_WIDGET_ID configurado).
+-->
+<script>
+  /**
+   * Carga cc-widget.js dentro del contenedor #chat-dock.
+   * En modo 'idle' pospone el parseo del script hasta que el navegador
+   * queda ocioso, protegiendo el LCP del hero.
+   */
+  function mountChat() {
+    const dock = document.getElementById('chat-dock');
+    if (!dock || dock.dataset.loaded === 'true') return;
+
+    dock.dataset.loaded = 'true';
+
+    const script = document.createElement('script');
+    script.src = dock.dataset.src ?? '';
+    script.defer = true;
+    script.dataset.publicId = dock.dataset.publicId ?? '';
+
+    // Avisar si el origen del widget no responde (dev sin servidor, etc.)
+    script.onerror = () => {
+      dock.dataset.failed = 'true';
+      console.warn(
+        '[CityDent] No se pudo cargar el widget del chat desde',
+        script.src,
+      );
+    };
+
+    dock.appendChild(script);
+  }
+
+  const schedule = () => {
+    const strategy =
+      document.getElementById('chat-dock')?.dataset.strategy ?? 'idle';
+
+    if (strategy === 'eager' || !('requestIdleCallback' in window)) {
+      mountChat();
+      return;
+    }
+
+    window.requestIdleCallback(mountChat, { timeout: 3000 });
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', schedule, { once: true });
+  } else {
+    schedule();
+  }
+
+  // Recargar tras una navegación de Astro (View Transitions)
+  document.addEventListener('astro:after-swap', () => {
+    const dock = document.getElementById('chat-dock');
+    if (dock) delete dock.dataset.loaded;
+    schedule();
+  });
+</script>

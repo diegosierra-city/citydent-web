@@ -1,0 +1,237 @@
+---
+/**
+ * Escena 2 (§3.2) y escena 5 (§3.4–3.5) de la propuesta aprobada.
+ *
+ *  #coste  — PAS tipográfico sobre papel: el coste lo pone el visitante.
+ *  #tiempo — banda navy con la proyección de futuro y la transcripción de
+ *            ejemplo, que llega mensaje a mensaje al entrar en pantalla.
+ */
+---
+
+<section id="coste" class="band bg-paper text-ink">
+  <div class="shell grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <div class="lg:col-span-6">
+      <h2 class="heading-section text-ink" data-reveal="mask">
+        Tu día no tiene más horas. Tus pacientes, más preguntas.
+      </h2>
+      <p class="prose-measure mt-6 text-mist" data-reveal="up">
+        El teléfono suena durante un tratamiento. Un WhatsApp llega a las 22:14.
+        «¿Cuál es vuestro horario?» se pregunta por vigésima vez esta semana.
+        Ninguna de esas consultas es difícil. Todas juntas se comen el día de tu
+        equipo.
+      </p>
+      <p class="mt-10 max-w-md font-display text-2xl leading-snug text-ink md:text-[1.75rem]" data-reveal="up">
+        No necesitas trabajar más horas. Necesitas que tu clínica responda
+        cuando tú no puedes.
+      </p>
+    </div>
+
+    <div class="lg:col-span-6 lg:pt-4">
+      <ul data-reveal="list">
+        {[
+          '¿Cuántas consultas no pudiste atender la semana pasada?',
+          '¿Cuántas de ellas eran un paciente nuevo buscando una clínica que respondiera?',
+          '¿Dónde reservó quien no obtuvo respuesta?',
+        ].map((question) => (
+          <li data-reveal-item class="border-t border-ink/15 py-5 first:border-t-0 first:pt-0">
+            <p class="font-display text-lg leading-snug text-ink md:text-xl">{question}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-10 rounded-[1.4rem] bg-ink/[0.04] p-6 md:p-7" data-reveal="up">
+        <p class="kicker text-brand-deep">Haz la cuenta con tus números</p>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <label class="sr-only" for="coste-consultas">
+            Consultas sin respuesta de la última semana
+          </label>
+          <input
+            id="coste-consultas"
+            class="calc-input"
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="9999"
+            step="1"
+            placeholder="12"
+            data-calc-input
+          />
+          <span class="font-display text-lg text-mist" aria-hidden="true">× 52 semanas</span>
+        </div>
+        <p class="mt-4 text-base leading-relaxed text-ink" aria-live="polite" data-calc-result>
+          Escribe cuántas consultas se quedaron sin respuesta la última semana.
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-mist">
+          En tu propuesta valoramos esas ocasiones con el ticket medio de tu
+          clínica.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tiempo" class="band relative bg-ink text-white">
+  <div class="shell grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+    <div>
+      <h2 class="heading-section text-white" data-reveal="mask">
+        No viene a sustituir a nadie.{' '}
+        <span class="text-brand-teal">Viene a devolveros el tiempo.</span>
+      </h2>
+      <p class="prose-measure mt-6 text-white/85" data-reveal="up">
+        Recepción deja de repetir lo que ya está escrito. El equipo dedica las
+        explicaciones a quien las necesita de verdad. Y tú vuelves a lo que
+        ningún asistente puede hacer: cuidar de quien está delante.
+      </p>
+      <p class="mt-8 max-w-md border-l border-brand-teal/60 pl-5 text-lg leading-relaxed text-white" data-reveal="up">
+        Imagina el viernes por la tarde sin la cola de mensajes acumulados desde
+        el lunes. Eso es lo que compra CityDent: no tecnología, tardes así.
+      </p>
+      <div class="mt-10" data-reveal="up">
+        <a
+          href="#demo"
+          class="gradient-cta inline-flex rounded-full px-7 py-3.5 font-semibold text-white shadow-lg shadow-brand-blue/25 transition-transform hover:scale-[1.03]"
+        >
+          Verlo responder
+        </a>
+      </div>
+    </div>
+
+    <!-- Transcripción de ejemplo: el producto hablando, no un adjetivo -->
+    <figure class="chat-panel rounded-[1.6rem] p-5 md:p-6" data-transcript data-reveal="soft">
+      <figcaption class="flex items-center gap-2.5 border-b border-white/15 pb-4">
+        <span class="gradient-bubble h-2.5 w-2.5 rounded-full" aria-hidden="true"></span>
+        <span class="text-sm font-semibold text-white">
+          CityDent · Clínica de demostración
+        </span>
+      </figcaption>
+
+      <div class="mt-5 flex flex-col gap-3.5">
+        <p class="bubble bubble-patient self-end max-w-[85%] bg-white/10 text-white" data-bubble="patient">
+          ¿Abrís este sábado?
+        </p>
+        <p class="bubble bubble-assistant self-start max-w-[92%] gradient-bubble text-ink" data-bubble="assistant">
+          Sí, los sábados de 10:00 a 14:00. ¿Te busco hueco?
+        </p>
+        <p class="bubble bubble-patient self-end max-w-[85%] bg-white/10 text-white" data-bubble="patient">
+          Sí, por favor.
+        </p>
+        <p class="bubble bubble-assistant self-start max-w-[92%] gradient-bubble text-ink" data-bubble="assistant">
+          ¿Me dices tu nombre y tu correo?
+        </p>
+        <p class="bubble bubble-patient self-end max-w-[85%] bg-white/10 text-white" data-bubble="patient">
+          Laura García — laura@ejemplo.com
+        </p>
+        <p class="bubble bubble-assistant self-start max-w-[92%] gradient-bubble text-ink" data-bubble="assistant">
+          Para este sábado tengo las 10:30 y las 12:00 con la Dra. Cifuentes.
+          ¿Cuál te va mejor?
+        </p>
+        <p class="bubble bubble-patient self-end max-w-[85%] bg-white/10 text-white" data-bubble="patient">
+          La de las 10:30.
+        </p>
+
+        <!--
+          Tarjeta de hora propuesta. Ilustración estática: el botón real vive en
+          el widget y lo pulsa el visitante. Aquí no es interactivo a propósito.
+        -->
+        <div
+          class="bubble bubble-assistant self-start max-w-[92%] gradient-bubble text-ink"
+          data-bubble="assistant"
+        >
+          <div class="rounded-[1rem] bg-paper p-4">
+            <p class="kicker text-brand-deep">Hora propuesta</p>
+            <p class="mt-2 font-display text-lg font-semibold leading-snug text-ink">
+              Sábado · 10:30
+            </p>
+            <p class="mt-1 text-sm leading-relaxed text-mist">
+              Primera visita y plan de tratamiento · 25 min · Dra. Cifuentes
+            </p>
+            <span
+              class="mt-3.5 inline-flex items-center gap-2 rounded-full bg-brand-blue px-4 py-2 text-sm font-semibold text-white"
+            >
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Reservar esta hora
+            </span>
+            <p class="mt-2.5 text-xs text-mist">La propuesta caduca a los 30 minutos.</p>
+          </div>
+        </div>
+
+        <p class="self-center text-center text-xs text-white/60" data-bubble="patient">
+          Laura pulsa «Reservar esta hora».
+        </p>
+
+        <p class="bubble bubble-assistant self-start max-w-[92%] gradient-bubble text-ink" data-bubble="assistant">
+          Listo, Laura. Primera visita este sábado a las 10:30. Para cambiarla,
+          llama al 91 555 28 47.
+        </p>
+      </div>
+
+      <p class="mt-5 border-t border-white/15 pt-4 text-xs leading-relaxed text-white/70">
+        Transcripción ilustrativa de la modalidad de agenda conectada. La reserva
+        la confirma el paciente con el botón: el asistente no escribe en la
+        agenda por su cuenta.
+      </p>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .calc-input {
+    width: 6.5rem;
+    border-radius: 0.9rem;
+    border: 1px solid rgb(12 38 65 / 0.22);
+    background: var(--color-paper);
+    padding: 0.65rem 0.9rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .calc-input:hover {
+    border-color: rgb(12 38 65 / 0.4);
+  }
+
+  .calc-input:focus {
+    outline: none;
+    border-color: var(--color-brand-blue);
+    box-shadow: 0 0 0 3px rgb(29 145 228 / 0.22);
+  }
+
+  /* La transcripción se apoya en el motivo burbuja, nunca en un panel de ficha */
+  .chat-panel {
+    background: linear-gradient(160deg, rgb(255 255 255 / 0.08), rgb(255 255 255 / 0.03));
+    box-shadow: 0 24px 60px -28px rgb(4 16 29 / 0.85);
+  }
+</style>
+
+<script>
+  /* Aritmética sobre el dato del visitante: ninguna cifra nuestra. */
+  const input = document.querySelector<HTMLInputElement>('[data-calc-input]');
+  const result = document.querySelector<HTMLElement>('[data-calc-result]');
+
+  const update = () => {
+    if (!input || !result) return;
+    const raw = input.value.trim();
+    if (raw === '') {
+      result.textContent =
+        'Escribe cuántas consultas se quedaron sin respuesta la última semana.';
+      return;
+    }
+
+    const weekly = Number(raw);
+    if (!Number.isFinite(weekly) || weekly < 0) {
+      result.textContent = 'Introduce un número de consultas válido.';
+      return;
+    }
+
+    const yearly = Math.round(Math.min(weekly, 9999) * 52);
+    result.textContent = `${yearly.toLocaleString('es-ES')} ${
+      yearly === 1 ? 'vez' : 'veces'
+    } al año en que un paciente no encontró respuesta en tu clínica.`;
+  };
+
+  input?.addEventListener('input', update);
+</script>

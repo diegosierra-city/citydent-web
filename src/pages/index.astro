@@ -1,17 +1,610 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import ChatDock from '../components/ChatDock.astro';
+import Problema from '../components/sections/Problema.astro';
+import Demo from '../components/sections/Demo.astro';
+import Beneficios from '../components/sections/Beneficios.astro';
+import Confianza from '../components/sections/Confianza.astro';
+import Precios from '../components/sections/Precios.astro';
+import Preguntas from '../components/sections/Preguntas.astro';
+import Cierre from '../components/sections/Cierre.astro';
+import { existsSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 
+/* Apertura continua: una sola secuencia de 240 fotogramas extraída del
+   máster limpio docs/videos/06.mp4 (zoom-out del gabinete). La versión
+   fuerza revalidar la extracción en cada cambio. */
+const seqDir = join(process.cwd(), 'public/img/secuencia-04');
+const seqCount = readdirSync(seqDir).filter((f) => /^frame-\d+\.webp$/.test(f)).length;
+if (seqCount < 2) throw new Error('Falta la secuencia 04. Ejecuta scripts/extract-frames.mjs 04.');
+const seqVersion = Math.trunc(statSync(join(seqDir, 'frame-000.webp')).mtimeMs).toString(36);
+const frameSrc = (i: number) => `/img/secuencia-04/frame-${String(i).padStart(3, '0')}.webp?v=${seqVersion}`;
+/* Fotograma representativo de cada pausa de lectura sobre la misma pista. */
+const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
+/* Póster del Hero: abre la pista como fotograma inicial estático. */
+const heroPath = join(process.cwd(), 'public/img/hero.webp');
+if (!existsSync(heroPath)) throw new Error('Falta public/img/hero.webp. Ejecuta scripts/prepare-assets.mjs.');
+const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toString(36)}`;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <!-- ============================================
+       APERTURA · #inicio (propuesta §4.1)
+       Un único canvas sticky para las cuatro secciones. El póster
+       es hero.webp: actúa de fotograma inicial bajo el mensaje del
+       Hero y la secuencia de 06.mp4 entra en fundido al iniciar el
+       scroll abajo. Sin JS o con movimiento reducido, el póster y
+       los fotogramas de fallback mantienen toda la lectura.
+       ============================================ -->
+  <div
+    id="inicio"
+    class="opening relative isolate bg-ink"
+    data-scene-seq
+    data-seq-static-poster
+    data-seq-base="/img/secuencia-04"
+    data-seq-count={seqCount}
+    data-seq-version={seqVersion}
+  >
+    <div class="opening-media" data-seq-stage>
+      <!-- Póster: la foto del gabinete abre la pista (LCP). -->
+      <img
+        data-seq-poster
+        src={heroUrl}
+        alt="Profesional de una clínica dental sonríe con protección facial y prepara sus instrumentos, vista desde la perspectiva del paciente"
+        class="sequence-visual hero-poster absolute inset-0 h-full w-full object-cover"
+        width="2096"
+        height="1184"
+        decoding="async"
+        fetchpriority="high"
+      />
+
+      <canvas
+        data-seq-canvas
+        class="sequence-visual absolute inset-0 h-full w-full object-cover opacity-0"
+        width="1920"
+        height="960"
+        aria-hidden="true"
+      ></canvas>
+      <!-- Scrims localizados: anclan el texto sin velar la escena -->
+      <div class="opening-scrim scrim-bottom absolute inset-0" aria-hidden="true"></div>
+      <div class="opening-scrim scrim-side absolute inset-0 hidden md:block" aria-hidden="true"></div>
+      <div class="continuity-scrim absolute inset-0" aria-hidden="true"></div>
+    </div>
+
+    <section class="opening-hero relative z-10 flex min-h-svh items-end md:items-center" aria-label="CityDent, asistencia para tu clínica">
+      <div class="container relative mx-auto w-full min-w-0 px-5 pt-28 pb-14 md:px-6 md:pt-32 md:pb-24">
+        <!-- Copy directo sobre la foto: scrim localizado + sombra tipográfica -->
+        <div class="max-w-md lg:max-w-xl" data-hero-copy>
+          <!-- Etiqueta: deja clara la categoría del producto -->
+          <p
+            class="inline-flex max-w-full flex-wrap items-center gap-2 rounded-full border border-brand-teal/50 bg-ink/45 px-3.5 py-1.5 text-[0.62rem] font-semibold tracking-[0.12em] text-brand-teal uppercase shadow-lg shadow-ink/30 backdrop-blur-sm sm:text-[0.7rem] sm:tracking-[0.16em]"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-brand-teal" aria-hidden="true"></span>
+            Asistente de IA para clínicas dentales en España
+          </p>
+
+          <h1
+            class="text-shadow-display mt-5 font-display text-[2.35rem] leading-[1.05] font-semibold text-white sm:text-5xl lg:text-[3.6rem]"
+          >
+            Lo más importante son <span class="text-brand-teal">tus pacientes</span>.
+          </h1>
+
+          <p class="text-shadow-hero mt-5 text-base leading-relaxed text-white/90 sm:text-lg">
+            CityDent atiende las consultas habituales con la información de tu
+            clínica, en tu web y en WhatsApp. En tu web, además, mira las horas
+            libres de tu agenda y cierra la cita mientras tu equipo cuida de
+            quien está en el sillón.
+          </p>
+
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a
+              href="#demo"
+              class="gradient-cta rounded-full px-7 py-3.5 text-center font-semibold text-white shadow-lg shadow-brand-blue/25 transition-transform hover:scale-[1.03]"
+            >
+              Probar CityDent
+            </a>
+            <a
+              href="#precios"
+              class="rounded-full border border-white/60 bg-ink/30 px-7 py-3.5 text-center font-semibold text-white shadow-lg shadow-ink/30 backdrop-blur-sm transition-colors hover:bg-ink/50"
+            >
+              Ver precios
+            </a>
+          </div>
+
+          <p class="text-shadow-hero mt-4 text-xs text-white/75">
+            Demo real en esta página, con una clínica ficticia. Sin registro.
+          </p>
+
+          <p class="text-shadow-hero mt-5 text-xs font-medium tracking-wide text-white/70">
+            Hecho para clínicas dentales · Reserva en tu agenda desde tu web ·
+            Puesta en marcha acompañada
+          </p>
+
+          <!-- Invitación al scroll -->
+          <p class="text-shadow-hero mt-7 flex items-center gap-2 text-sm font-medium text-white/85">
+            Descubre cuánto te cuesta no responder.
+            <svg
+              class="cue-drift h-4 w-4 text-brand-teal"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7-7-7" />
+            </svg>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         ESCENA 2 · #cada-paciente (propuesta §4.2)
+         Secuencia de fotogramas con scrub: el scroll avanza y
+         retrocede la animación, sincronizado. Sin JS o con
+         movimiento reducido queda el póster estático y la
+         pista de scroll no se alarga.
+         ============================================ -->
+    <section
+      id="cada-paciente"
+      class="opening-patient relative"
+    >
+      <img
+        data-seq-fallback
+        src={frameAt(0.4)}
+        alt="La cámara se aleja del rostro de la profesional hasta mostrar a la paciente en el sillón y la consulta completa"
+        class="absolute inset-0 h-full w-full object-cover"
+        width="1920"
+        height="960"
+        loading="lazy"
+        decoding="async"
+      />
+      <div data-seq-fallback class="scrim-side absolute inset-0" aria-hidden="true"></div>
+
+      <div class="opening-patient-copy container relative z-10 mx-auto flex min-h-svh items-center px-5 py-28 md:px-6">
+        <div class="max-w-md lg:max-w-xl" data-seq-copy>
+          <h2
+            class="text-shadow-display font-display text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-[3.4rem]"
+          >
+            Cada paciente merece tu atención.
+          </h2>
+          <p class="text-shadow-hero mt-5 max-w-prose text-base leading-relaxed text-white/90 sm:text-lg">
+            Escuchar, explicar y acompañar. Esa parte no se delega. Por eso duele
+            tanto el tiempo que se va en responder lo que ya está escrito.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  <!--
+    THESIS: el recorrido del gabinete enlaza el apoyo administrativo con el humano.
+    OWN-WORLD: fotografía a sangre, Jost, navy y sombras; sin paneles ni tarjetas.
+    STORY: dos mensajes de §4.3–4.4, un solo movimiento reversible al hacer scroll.
+    FIRST VIEWPORT: personas en el plano superior, texto a la izquierda abajo.
+    FORM: continuación del mundo existente; móvil separa imagen y lectura.
+    El vídeo 06.mp4 ilustra atención clínica, no clientes ni una demostración del software.
+  -->
+  <div class="care-story relative">
+    <div class="care-media" data-seq-fallback>
+      <img
+        src={frameAt(0.6)}
+        alt="Una profesional acompaña a su paciente en el gabinete dental"
+        class="care-visual absolute inset-0 h-full w-full object-cover"
+        width="1920" height="960" loading="lazy" decoding="async"
+      />
+      <div class="care-scrim absolute inset-0" aria-hidden="true"></div>
+    </div>
+
+    <section id="citydent-responde" class="care-beat care-first relative" aria-labelledby="responde-heading">
+      <div class="care-copy container relative z-10 mx-auto flex flex-col justify-end px-5 md:px-6">
+        <div class="care-message">
+          <h2 id="responde-heading" class="text-shadow-display font-display text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-[3.4rem]">
+            Mientras tú cuidas, <span class="text-brand-teal">CityDent responde.</span>
+          </h2>
+          <p class="text-shadow-hero mt-5 text-base leading-relaxed text-white/90 sm:text-lg">
+            Horarios, ubicación, servicios y cómo pedir cita. Las consultas
+            habituales encuentran respuesta con la información de tu clínica,
+            sin interrumpir cada conversación en recepción.
+          </p>
+          <p class="text-shadow-hero mt-5 text-base font-semibold text-white">
+            Información de tu clínica. Atención con tu estilo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="equipo" class="care-beat care-team relative" aria-labelledby="equipo-heading">
+      <img
+        data-seq-fallback
+        src={frameAt(1)}
+        alt="La profesional y la paciente miran a la cámara sonrientes al cerrar la consulta"
+        class="care-visual absolute inset-0 h-full w-full object-cover"
+        width="1920" height="960" loading="lazy" decoding="async"
+      />
+      <div data-seq-fallback class="care-scrim absolute inset-0" aria-hidden="true"></div>
+      <div class="care-copy container relative z-10 mx-auto flex flex-col justify-end px-5 md:px-6">
+        <div class="care-message">
+          <h2 id="equipo-heading" class="text-shadow-display font-display text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-[3.4rem]">
+            Un apoyo para tu equipo. Más atención para tus pacientes.
+          </h2>
+          <p class="text-shadow-hero mt-5 text-base leading-relaxed text-white/90 sm:text-lg">
+            CityDent se encarga de parte de las consultas repetitivas. Tu equipo aporta
+            lo que hace única a tu clínica: criterio, cercanía y trato personal.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  </div>
+
+  <!-- ============================================
+       RECORRIDO DE VENTA (propuesta §3.2–§3.13)
+       Orden del embudo: coste → proyección → prueba →
+       contraste → límites → fundadoras → precios →
+       puesta en marcha → preguntas → contacto.
+       ============================================ -->
+  <Problema />
+  <Demo />
+  <Beneficios />
+  <Confianza />
+  <Precios />
+  <Preguntas />
+  <Cierre />
+
+  <!-- Asistente de demostración (único asistente de la página) -->
+  <ChatDock loadStrategy="idle" />
+</Layout>
+
+<style>
+  .opening { display: grid; }
+  .opening-media { position: relative; grid-area: 1 / 1; overflow: hidden; }
+  .opening-hero { grid-area: 1 / 1; }
+  .opening-patient { grid-area: 2 / 1; }
+  /* Encuadre: el vídeo hace el zoom-out; en vertical el recorte 2:1 es tan
+     estrecho que el lienzo debe seguir a los rostros con un paneo suave. */
+  .sequence-visual { object-position: var(--sequence-x, 54%) 40%; }
+  /* El póster del Hero abre la pista con encuadre propio: rostro
+     arriba y al margen del paneo de los fotogramas 2:1. */
+  .hero-poster { object-position: 50% 30%; }
+  /* El vídeo entra y sale sobre el póster con un fundido corto. */
+  .opening-media [data-seq-canvas] { transition: opacity 0.45s ease; }
+  .opening-patient-copy { align-items: flex-end; padding-bottom: 5rem; }
+  img[data-seq-fallback] { object-position: var(--sequence-x, 52%) 40%; }
+
+  /* La foto permanece fija; los mensajes conservan su flujo y sus anclas. */
+  .opening[data-seq-active] { display: block; }
+  [data-seq-active] .opening-media { position: sticky; top: 0; height: 100svh; }
+  [data-seq-active] .opening-hero { margin-top: -100svh; }
+  [data-seq-active] .opening-patient { min-height: 200svh; }
+  [data-seq-active] .opening-patient-copy { position: sticky; top: 0; }
+  [data-seq-active] [data-seq-fallback] { display: none; }
+
+  /* Dos pausas de lectura sobre el mismo recorrido de cámara. */
+  .care-story { display: grid; grid-area: 3 / 1; }
+  .care-media { position: relative; grid-area: 1 / 1; overflow: hidden; }
+  .care-first { grid-area: 1 / 1; }
+  .care-team { grid-area: 2 / 1; }
+  .care-copy { min-height: 100svh; padding-top: 55svh; padding-bottom: 3rem; }
+  .care-message { max-width: 34rem; }
+  .care-visual { object-position: 50% 40%; }
+  .care-scrim {
+    background: linear-gradient(to top, rgba(12, 38, 65, .96), rgba(12, 38, 65, .72) 27%, rgba(12, 38, 65, 0) 64%);
+  }
+  [data-seq-active] .care-story { display: block; }
+  [data-seq-active] .care-first { min-height: 200svh; }
+  [data-seq-active] .care-team { min-height: 100svh; }
+  [data-seq-active] .care-copy { position: sticky; top: 0; }
+  .opening-scrim { opacity: calc(1 - var(--care-tone, 0)); }
+  .continuity-scrim {
+    opacity: var(--care-tone, 0);
+    background: linear-gradient(to top, rgba(12, 38, 65, .96), rgba(12, 38, 65, .75) 27%, rgba(12, 38, 65, 0) 64%);
+  }
+
+  @media (max-width: 1023px) {
+    /* La superficie de lectura queda bajo el plano, sin recortar los rostros. */
+    .care-visual { height: 52svh; }
+    /* El fallback estático no recibe el paneo: estos dos fotogramas
+       necesitan su propio encuadre para no perder a la profesional. */
+    .care-media img { object-position: 42% 40%; }
+    #equipo img[data-seq-fallback] { object-position: 36% 40%; }
+    .care-scrim { background: linear-gradient(to bottom, transparent 35svh, var(--color-ink) 52svh); }
+    .care-copy { padding-top: 52svh; padding-bottom: 2.5rem; }
+    .care-message h2 { font-size: clamp(1.75rem, 7.7vw, 2.4rem); }
+  }
+
+  @media (min-width: 768px) {
+    .opening-patient-copy { align-items: center; padding-bottom: 7rem; }
+  }
+
+  @media (min-width: 1024px) {
+    /* En horizontal el cover ya abarca ambas figuras: sin paneo. */
+    .sequence-visual { object-position: 50% 40%; }
+    .hero-poster { object-position: 50% 30%; }
+    img[data-seq-fallback] { object-position: 50% 40%; }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger } from '../lib/scroll';
+  import { initReveals } from '../lib/reveal';
+
+  function setupSequence(section: HTMLElement) {
+    const canvas = section?.querySelector<HTMLCanvasElement>('[data-seq-canvas]');
+    const poster = section?.querySelector<HTMLImageElement>('[data-seq-poster]');
+    const stage = section.querySelector<HTMLElement>('[data-seq-stage]');
+    const ctx = canvas?.getContext('2d', { alpha: false });
+    const count = Number(section?.dataset.seqCount ?? 0);
+    if (!section || !canvas || !poster || !stage || !ctx || count < 2 || !window.createImageBitmap) return;
+
+    const careStory = section.querySelector<HTMLElement>('.care-story');
+    /* Póster estático (Hero): el cabezal en 0 es la propia foto, no un
+       fotograma; el lienzo permanece oculto hasta empezar a scrollear. */
+    const staticPoster = section.hasAttribute('data-seq-static-poster');
+    const source = (i: number) =>
+      `${section.dataset.seqBase}/frame-${String(i).padStart(3, '0')}.webp?v=${section.dataset.seqVersion}`;
+
+    /* El canvas ajusta su resolución interna al tamaño real del contenedor
+       multiplicado por el devicePixelRatio (limitado a 2). Así en pantallas
+       PC/retina los fotogramas se ven nítidos, no escalados por el navegador. */
+    const controller = new AbortController();
+    const blobs = new Map<number, Blob>();
+    const frames = new Map<number, ImageBitmap>();
+    const downloading = new Set<number>();
+    const decoding = new Set<number>();
+    const failed = new Set<number>();
+    const radius = window.matchMedia('(max-width: 767px)').matches ? 4 : 10;
+    let disposed = false;
+    let started = false;
+    let target = 0;
+    let drawn = -1;
+    /* Redimensionar el canvas vacía su búfer; sin esta referencia el último
+       plano pintado se perdería y draw() no lo repintaría (drawn === target). */
+    let lastPaint: { source: CanvasImageSource; w: number; h: number } | null = null;
+
+    /* El canvas no estira el fotograma a la caja del viewport: lo pinta con
+       el mismo criterio cover que el póster (escala hasta cubrir y recorta
+       el sobrante), guiándose por las mismas variables object-position.
+       Sin esto, en móvil vertical un fotograma 2:1 se deforma casi 4×. */
+    const paint = (source: CanvasImageSource, sourceW: number, sourceH: number) => {
+      const scale = Math.max(canvas.width / sourceW, canvas.height / sourceH);
+      const w = sourceW * scale;
+      const h = sourceH * scale;
+      const [ox, oy] = getComputedStyle(canvas).objectPosition.split(' ').map((v) => parseFloat(v) / 100);
+      ctx.drawImage(source, (canvas.width - w) * (Number.isFinite(ox) ? ox : .5), (canvas.height - h) * (Number.isFinite(oy) ? oy : .5), w, h);
+      lastPaint = { source, w: sourceW, h: sourceH };
+    };
+
+    const resizeCanvas = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        if (lastPaint) paint(lastPaint.source, lastPaint.w, lastPaint.h);
+      }
+    };
+    resizeCanvas();
+    const ro = new ResizeObserver(resizeCanvas);
+    ro.observe(canvas.parentElement!);
+
+    /* El canvas nunca se vacía entre fotogramas ni cambia de src.
+       Solo recibe píxeles ya decodificados: una descarga lenta conserva
+       el último plano válido, no muestra un flash ni una imagen rota. */
+    const draw = () => {
+      if (disposed) return;
+      /* Con póster estático, el fotograma 0 lo firma la foto del Hero:
+         el lienzo se oculta con fundido y el vídeo entra con el primer
+         fotograma real del scrub (y se retira al volver al cabezal 0). */
+      if (staticPoster && target === 0) {
+        canvas.style.opacity = '0';
+        return;
+      }
+      const frame = frames.get(target);
+      if (!frame || disposed) return;
+      if (drawn !== target) {
+        /* La apertura oscurece su scrim de continuidad al entrar en el
+           recorrido de lectura; el footer no tiene esa superposición. */
+        if (careStory) {
+          const progress = target / (count - 1);
+          section.style.setProperty('--care-tone', String(Math.min(1, Math.max(0, (progress - .5) * 5))));
+          /* Hitos medidos sobre los fotogramas 0/60/120/180/239 de 06.mp4:
+             el dúo arranca centrado y se mantiene mientras ella trabaja de
+             espaldas; al abrir el plano los rostros migran a la izquierda y
+             se reparten otra vez en el cierre sonriente a cámara. */
+          const stops = [54, 55, 50, 30, 36];
+          const pos = progress * (stops.length - 1);
+          const idx = Math.min(Math.floor(pos), stops.length - 2);
+          const pan = stops[idx] + (stops[idx + 1] - stops[idx]) * (pos - idx);
+          section.style.setProperty('--sequence-x', `${pan.toFixed(1)}%`);
+        }
+        /* Se pinta después de fijar las variables: el scrim viaja con el
+           fotograma actual, no con el que estaba en el estilo. */
+        paint(frame, frame.width, frame.height);
+        drawn = target;
+        canvas.dataset.frame = String(drawn);
+      }
+      canvas.style.opacity = '1';
+    };
+
+    const priorities = (distance: number) => {
+      const order = [target];
+      for (let d = 1; d <= distance; d++) {
+        if (target + d < count) order.push(target + d);
+        if (target - d >= 0) order.push(target - d);
+      }
+      return order;
+    };
+
+    /* Caché decodificada acotada: 9 planos en móvil, 21 en escritorio.
+       El resto permanece comprimido; no retenemos cientos de MB de RGBA. */
+    const decodeNearby = () => {
+      if (disposed) return;
+      for (const [i, bitmap] of frames) {
+        if (Math.abs(i - target) > radius) {
+          if (lastPaint?.source === bitmap) {
+            lastPaint = { source: poster, w: poster.naturalWidth, h: poster.naturalHeight };
+          }
+          bitmap.close();
+          frames.delete(i);
+        }
+      }
+      const order = priorities(radius);
+      while (decoding.size < 2) {
+        const i = order.find((n) => blobs.has(n) && !frames.has(n) && !decoding.has(n) && !failed.has(n));
+        if (i === undefined) break;
+        decoding.add(i);
+        createImageBitmap(blobs.get(i)!).then((bitmap) => {
+          if (disposed || Math.abs(i - target) > radius) bitmap.close();
+          else {
+            frames.set(i, bitmap);
+            draw();
+          }
+        }).catch(() => { failed.add(i); }).finally(() => {
+          decoding.delete(i);
+          decodeNearby();
+        });
+      }
+    };
+
+    /* Cuatro descargas simultáneas, priorizando siempre la posición actual
+       y sus vecinos, también al invertir rápidamente el scroll. */
+    const download = () => {
+      if (disposed || !started) return;
+      const order = priorities(count - 1);
+      while (downloading.size < 4) {
+        const i = order.find((n) => !blobs.has(n) && !downloading.has(n) && !failed.has(n));
+        if (i === undefined) break;
+        downloading.add(i);
+        fetch(source(i), { signal: controller.signal }).then((response) => {
+          if (!response.ok) throw new Error(`Fotograma ${i}: ${response.status}`);
+          return response.blob();
+        }).then((blob) => {
+          if (!disposed) {
+            blobs.set(i, blob);
+            section.dataset.seqLoaded = String(blobs.size);
+            decodeNearby();
+          }
+        }).catch(() => { failed.add(i); }).finally(() => {
+          downloading.delete(i);
+          download();
+        });
+      }
+    };
+
+    section.dataset.seqActive = '';
+    if (staticPoster) canvas.style.opacity = '0';
+    const playhead = { progress: 0 };
+    const tween = gsap.to(playhead, {
+      progress: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: () => `+=${section.offsetHeight - stage.offsetHeight}`,
+        scrub: 0.2,
+        invalidateOnRefresh: true,
+      },
+      /* onUpdate pertenece al tween: scrub suaviza el cabezal real,
+         no solo un ScrollTrigger sin animación asociada. */
+      onUpdate: () => {
+        target = Math.round(playhead.progress * (count - 1));
+        target = Math.max(0, Math.min(count - 1, target));
+        canvas.dataset.targetFrame = String(target);
+        draw();
+        decodeNearby();
+        download();
+      },
+    });
+
+    /* El mensaje se retira antes de salir de su zona de contraste;
+       el tramo central deja ver el giro de cámara sin cruzar los rostros. */
+    const copyExits = Array.from(section.querySelectorAll<HTMLElement>('.opening-patient, .care-first'), (beat) => gsap.to(beat.querySelector('[data-seq-copy], .care-message'), {
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: beat,
+        start: 'bottom 120%',
+        end: 'bottom bottom',
+        scrub: true,
+        invalidateOnRefresh: true,
+      },
+    }));
+
+    /* El Hero carga de inmediato; el footer espera a acercarse a un
+       viewport para no competir por sus 72 peticiones durante la apertura. */
+    const startLoading = () => {
+      if (disposed || started) return;
+      started = true;
+      /* Sin póster estático el lienzo arranca pintando el fotograma 0;
+         con él, la foto del Hero ya cubre el escenario y el canvas espera. */
+      if (!staticPoster) {
+        poster.decode().then(() => {
+          if (disposed || drawn >= 0) return;
+          paint(poster, poster.naturalWidth, poster.naturalHeight);
+          drawn = 0;
+          canvas.style.opacity = '1';
+          canvas.dataset.frame = '0';
+        }).catch(() => {});
+      }
+      download();
+    };
+    let observer: IntersectionObserver | undefined;
+    if (section.hasAttribute('data-seq-deferred') && 'IntersectionObserver' in window) {
+      observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          startLoading();
+          observer?.disconnect();
+        }
+      }, { rootMargin: `${window.innerHeight}px 0px` });
+      observer.observe(section);
+    } else startLoading();
+
+    return () => {
+      disposed = true;
+      controller.abort();
+      ro.disconnect();
+      observer?.disconnect();
+      copyExits.forEach((exit) => { exit.scrollTrigger?.kill(); exit.kill(); });
+      tween.scrollTrigger?.kill();
+      tween.kill();
+      for (const bitmap of frames.values()) bitmap.close();
+      frames.clear();
+      blobs.clear();
+      delete section.dataset.seqActive;
+      section.style.removeProperty('--care-tone');
+      section.style.removeProperty('--sequence-x');
+      canvas.style.opacity = '0';
+      delete canvas.dataset.frame;
+      delete canvas.dataset.targetFrame;
+      delete section.dataset.seqLoaded;
+    };
+  }
+
+  const media = gsap.matchMedia();
+  media.add({
+    motion: '(prefers-reduced-motion: no-preference)',
+    short: '(max-height: 599px)',
+    footerCompact: '(max-width: 1023px) and (max-height: 759px)',
+  }, (context) => {
+    if (!context.conditions?.motion || context.conditions?.short) return;
+    /* En horizontal o con zoom alto, la lectura necesita su altura natural. */
+    const cleanups = Array.from(document.querySelectorAll<HTMLElement>('[data-scene-seq]'), (section) => {
+      if (context.conditions?.footerCompact && section.hasAttribute('data-seq-deferred')) return;
+      return setupSequence(section);
+    });
+    ScrollTrigger.refresh();
+    return () => cleanups.forEach((cleanup) => cleanup?.());
+  });
+
+  /* Los revelados de contenido se crean después de la secuencia: así las
+     posiciones de ScrollTrigger ya reflejan la pista sticky real. */
+  const disposeReveals = initReveals();
+  ScrollTrigger.refresh();
+
+  document.addEventListener('astro:before-swap', () => {
+    disposeReveals();
+    media.revert();
+  }, { once: true });
+</script>
