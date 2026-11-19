@@ -3,6 +3,9 @@ dist/
 # generated types
 .astro/
 
+# capturas de verificación CDP (scripts/verify-seq-scrub.mjs)
+.verify*/
+
 # dependencies
 node_modules/
 
@@ -22,3 +25,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# runtime del endpoint PHP (throttle por IP) — sólo existe en el servidor
+public/.rate/
+public/api/.rate/
