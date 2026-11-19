@@ -1,0 +1,309 @@
+---
+/**
+ * Layout base de CityDent
+ * Marca: burbuja de chat + diente (docs/logo) · Mundo visual: DESIGN.md
+ * Incluye: GSAP ScrollTrigger, Lenis smooth scroll, estructura HTML base
+ */
+import '../styles/global.css';
+import { readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+
+const footerDir = join(process.cwd(), 'public/img/secuencia-03');
+const footerCount = readdirSync(footerDir).filter((name) => /^frame-\d+\.webp$/.test(name)).length;
+const footerVersion = Math.trunc(statSync(join(footerDir, 'frame-000.webp')).mtimeMs).toString(36);
+const footerPoster = `/img/secuencia-03/frame-000.webp?v=${footerVersion}`;
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = 'CityDent | Asistente de IA para clínicas dentales',
+  description = 'Responde consultas habituales en tu web y WhatsApp con CityDent. Prueba la demo y solicita una propuesta adaptada a tu clínica dental.',
+  ogTitle = 'Lo más importante son tus pacientes. Conoce CityDent.',
+  ogDescription = 'Un asistente de IA para apoyar la atención de tu clínica dental. Pruébalo en una demostración interactiva.',
+  ogImage = '/img/hero.jpg',
+  noindex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+/* Nav principal (propuesta §3): cada href debe coincidir con un id real de la página */
+const navLinks = [
+  { href: '#beneficios', label: 'Cómo te ayuda' },
+  { href: '#demo', label: 'Pruébalo' },
+  { href: '#precios', label: 'Precios' },
+  { href: '#preguntas', label: 'Preguntas frecuentes' },
+];
+
+/* Pie (propuesta §8): sólo enlaces que resuelven a contenido real */
+const footerLinks = [
+  { href: '#beneficios', label: 'Cómo te ayuda' },
+  { href: '#demo', label: 'Probar CityDent' },
+  { href: '#fundadoras', label: 'Clínicas fundadoras' },
+  { href: '#precios', label: 'Precios' },
+  { href: '#puesta-en-marcha', label: 'Puesta en marcha' },
+  { href: '#preguntas', label: 'Preguntas frecuentes' },
+  { href: '#contacto', label: 'Contacto' },
+];
+---
+
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <!-- Meta básico -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+
+    <!-- SEO -->
+    <title>{title}</title>
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0C2641" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="CityDent" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Preconnect para performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Fuentes: Jost (display geométrica, eco de Futura del logo) + Source Sans 3 (body) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--
+      GSAP, ScrollTrigger y Lenis se cargan desde npm (no CDN):
+      - evita la advertencia de SRI / third-party sin integridad
+      - garantiza UNA sola instancia compartida con los componentes
+      La inicialización vive en src/lib/scroll.ts
+    -->
+  </head>
+
+  <body class="flex min-h-screen flex-col">
+    <!-- Header fijo (propuesta §3) -->
+    <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur-md">
+      <nav class="container mx-auto flex items-center justify-between px-5 py-3.5 md:px-6" aria-label="Principal">
+        <a href="#inicio" class="flex items-center gap-2.5" aria-label="CityDent — ir al inicio">
+          <img src="/favicon.svg" alt="" aria-hidden="true" width="36" height="36" class="h-9 w-9" />
+          <span class="font-display text-2xl font-semibold tracking-tight text-white">
+            City<span class="gradient-text">Dent</span>
+          </span>
+        </a>
+
+        <ul class="hidden items-center gap-7 text-sm font-medium md:flex">
+          {navLinks.map((link) => (
+            <li>
+              <a href={link.href} class="text-white/85 transition-colors hover:text-brand-teal">
+                {link.label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a
+              href="#demo"
+              class="gradient-cta rounded-full px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.03]"
+            >
+              Probar CityDent
+            </a>
+          </li>
+        </ul>
+
+        <button
+          type="button"
+          class="text-white md:hidden"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          data-mobile-nav-toggle
+        >
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </nav>
+
+      <!-- Menú móvil -->
+      <ul
+        id="mobile-nav"
+        class="hidden flex-col gap-1 border-t border-white/10 bg-ink px-5 py-4 text-sm font-medium md:hidden"
+        data-mobile-nav
+      >
+        {navLinks.map((link) => (
+          <li>
+            <a href={link.href} class="block rounded-lg px-3 py-2.5 text-white/90 hover:bg-white/10">
+              {link.label}
+            </a>
+          </li>
+        ))}
+        <li class="mt-2 px-3">
+          <a href="#demo" class="gradient-cta block rounded-full px-5 py-3 text-center font-semibold text-white">
+            Probar CityDent
+          </a>
+        </li>
+      </ul>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <!-- Pie (propuesta §8): identidad + enlaces reales; los legales se añaden al publicar páginas -->
+    <footer
+      id="pie"
+      class="footer-scene relative isolate bg-ink text-white"
+      data-scene-seq
+      data-seq-base="/img/secuencia-03"
+      data-seq-count={footerCount}
+      data-seq-version={footerVersion}
+      data-seq-deferred
+    >
+      <div class="footer-stage" data-seq-stage>
+        <div class="footer-media absolute inset-0 overflow-hidden" aria-hidden="true">
+          <img
+            data-seq-poster
+            src={footerPoster}
+            alt=""
+            class="footer-visual absolute inset-0 h-full w-full object-cover"
+            width="1280" height="720" loading="lazy" decoding="async"
+          />
+          <canvas
+            data-seq-canvas
+            class="footer-visual absolute inset-0 h-full w-full object-cover opacity-0"
+            width="1280" height="720"
+          ></canvas>
+          <div class="footer-scrim absolute inset-0"></div>
+        </div>
+      <div class="footer-content text-shadow-hero container relative z-10 mx-auto w-full px-5 pb-8 md:px-6 lg:pb-14">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div class="max-w-sm">
+            <a href="#inicio" class="flex items-center gap-2.5" aria-label="CityDent — ir al inicio">
+              <img src="/favicon.svg" alt="" aria-hidden="true" width="36" height="36" class="h-9 w-9" />
+              <span class="font-display text-2xl font-semibold tracking-tight">
+                City<span class="gradient-text">Dent</span>
+              </span>
+            </a>
+            <p class="mt-4 text-base leading-relaxed text-white/90">
+              CityDent. Asistencia con IA para clínicas dentales. Atención personal donde más importa.
+            </p>
+          </div>
+
+          <nav aria-label="Pie de página">
+            <ul class="grid grid-cols-2 gap-x-6 gap-y-1 text-base text-white/90 sm:grid-cols-3 lg:gap-x-10">
+              {footerLinks.map((link) => (
+                <li>
+                  <a href={link.href} class="inline-flex min-h-11 items-center transition-colors hover:text-brand-teal">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+
+        <div class="mt-6 border-t border-white/20 pt-5 lg:mt-12">
+          <p class="text-xs text-white/80">
+            © {new Date().getFullYear()} CityDent. Todos los derechos reservados.
+          </p>
+        </div>
+      </div>
+      </div>
+    </footer>
+
+    <style>
+      .footer-stage { position: relative; display: flex; align-items: flex-end; min-height: 100svh; }
+      .footer-visual { object-position: 70% 20%; }
+      .footer-content { padding-top: 55svh; }
+      .footer-scrim {
+        background: linear-gradient(to bottom, rgba(12, 38, 65, .14), transparent 32%, rgba(12, 38, 65, .92) 76%, var(--color-ink));
+      }
+      .footer-scene[data-seq-active] { min-height: 250svh; }
+      .footer-scene[data-seq-active] .footer-stage { position: sticky; top: 0; }
+      @media (max-width: 1023px) {
+        .footer-stage { align-items: flex-start; }
+        .footer-visual { height: 40svh; top: auto; bottom: 0; object-position: 85% 20%; }
+        .footer-content { padding-top: 2rem; padding-bottom: calc(40svh + 2rem); }
+        .footer-scrim {
+          background: linear-gradient(to top, transparent 25svh, var(--color-ink) 40svh);
+        }
+      }
+    </style>
+
+    <!-- Inicialización centralizada de scroll suave + ScrollTrigger -->
+    <script>
+      import { initScroll, scrollToTarget } from '../lib/scroll';
+
+      initScroll();
+
+      /* Navega a un anchor sólo si la sección existe (evita errores en anclas pendientes) */
+      const goAnchor = (href: string | null): boolean => {
+        if (!href || href === '#' || href === '/') return false;
+        if (!document.querySelector(href)) return false;
+        scrollToTarget(href);
+        history.replaceState(null, '', href);
+        return true;
+      };
+
+      /* ---- Menú móvil ---- */
+      const toggle = document.querySelector<HTMLButtonElement>('[data-mobile-nav-toggle]');
+      const menu = document.querySelector<HTMLElement>('[data-mobile-nav]');
+
+      if (toggle && menu) {
+        const setOpen = (open: boolean) => {
+          menu.classList.toggle('hidden', !open);
+          menu.classList.toggle('flex', open);
+          toggle.setAttribute('aria-expanded', String(open));
+        };
+
+        toggle.addEventListener('click', () => {
+          setOpen(menu.classList.contains('hidden'));
+        });
+
+        // Al elegir una sección se cierra y se hace scroll compensando el header
+        menu.addEventListener('click', (event) => {
+          const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]');
+          if (!link) return;
+          const href = link.getAttribute('href');
+          if (!document.querySelector(href ?? '')) return; // sección aún no publicada
+          event.preventDefault();
+          setOpen(false);
+          goAnchor(href);
+        });
+      }
+
+      /* ---- Anchors globales vía Lenis ---- */
+      document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const href = link.getAttribute('href');
+          if (!document.querySelector(href ?? '')) return;
+          event.preventDefault();
+          goAnchor(href);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,280 @@
+@import "tailwindcss";
+
+/* ============================================
+   CityDent Design Tokens
+   Marca: burbuja de chat + diente (docs/logo)
+   Ver DESIGN.md para el mundo visual completo
+   ============================================ */
+
+@theme {
+  /* Tinta y campos oscuros (navy de marca) */
+  --color-ink: #0C2641;
+  --color-ink-soft: #12314f;
+
+  /* Acento comprometido azul -> turquesa */
+  --color-brand-blue: #1D91E4;
+  --color-brand-teal: #26BDC6;
+  /* Mismo acento oscurecido: único azul apto para texto pequeño sobre blanco */
+  --color-brand-deep: #12608F;
+
+  /* Degradado burbuja (SOLO motivo del asistente/demo) */
+  --color-bubble-start: #5AAEE0;
+  --color-bubble-end: #38C3C4;
+
+  /* Neutros */
+  --color-mist: #494D56;
+  --color-paper: #FFFFFF;
+
+  /* Compatibilidad con nombres previos usados por componentes */
+  --color-city-blue-900: #0C2641;
+  --color-city-blue-700: #1A4A6B;
+  --color-city-blue-500: #1D91E4;
+  --color-city-blue-50: #EFF8FE;
+  --color-city-teal-500: #26BDC6;
+  --color-city-teal-400: #38C3C4;
+
+  /* Tipografía: display geométrica (eco de Futura del logo) + body humanista */
+  --font-display: 'Jost', 'Futura', 'Century Gothic', system-ui, sans-serif;
+  --font-sans: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+
+  /* Espaciado */
+  --spacing-section: 6rem;
+}
+
+/* ============================================
+   Estilos base
+   ============================================ */
+
+/*
+  NO se declara `scroll-behavior: smooth` en html.
+  Lenis ya controla el scroll suave; combinar ambos provoca
+  doble animación y saltos incorrectos en los anchors.
+*/
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-paper);
+  overflow-x: clip;
+}
+
+/* Compensar el header fijo al navegar por anchors */
+:where(section[id], div[id])[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* Foco visible y consistente en toda la página */
+:focus-visible {
+  outline: 3px solid var(--color-brand-teal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================
+   Utilidades de marca
+   ============================================ */
+
+/* Texto con el acento azul -> turquesa */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-brand-teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Superficie de acción principal (CTA) */
+.gradient-cta {
+  background: linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-brand-teal) 100%);
+}
+
+/* Superficie del motivo burbuja (demo / asistente) */
+.gradient-bubble {
+  background: linear-gradient(180deg, var(--color-bubble-start) 0%, var(--color-bubble-end) 100%);
+}
+
+/*
+  Scrim localizado para el hero fotográfico.
+  Capa inferior: ancla el texto en móvil (la imagen cede el tercio inferior).
+  La capa lateral se añade sólo en md+ para asentar la columna izquierda
+  sin velar el rostro (centro-derecha) ni los instrumentos (centro).
+*/
+.scrim-bottom {
+  background: linear-gradient(
+    to top,
+    rgba(12, 38, 65, 0.94) 0%,
+    rgba(12, 38, 65, 0.72) 26%,
+    rgba(12, 38, 65, 0.18) 52%,
+    rgba(12, 38, 65, 0) 72%
+  );
+}
+
+/* Scrim lateral: asienta columnas de texto sobre fotografía o secuencias */
+.scrim-side {
+  background: linear-gradient(
+    to right,
+    rgba(12, 38, 65, 0.86) 0%,
+    rgba(12, 38, 65, 0.52) 42%,
+    rgba(12, 38, 65, 0) 80%
+  );
+}
+
+@media (min-width: 768px) {
+  .scrim-bottom {
+    background: linear-gradient(
+      to top,
+      rgba(12, 38, 65, 0.55) 0%,
+      rgba(12, 38, 65, 0.12) 30%,
+      rgba(12, 38, 65, 0) 55%
+    );
+  }
+  .scrim-side {
+    background: linear-gradient(
+      to right,
+      rgba(12, 38, 65, 0.82) 0%,
+      rgba(12, 38, 65, 0.5) 36%,
+      rgba(12, 38, 65, 0) 66%
+    );
+  }
+}
+
+/*
+  Sombra tipográfica: el copy del hero vive directamente sobre la
+  fotografía (sin recuadro) y debe mantener contraste AA en zonas claras.
+*/
+.text-shadow-hero {
+  text-shadow:
+    0 1px 2px rgba(12, 38, 65, 0.85),
+    0 2px 18px rgba(12, 38, 65, 0.6);
+}
+
+.text-shadow-display {
+  text-shadow:
+    0 2px 6px rgba(12, 38, 65, 0.8),
+    0 6px 34px rgba(12, 38, 65, 0.55);
+}
+
+/* Invitación al scroll: deriva suave (sin rebote) */
+@keyframes cue-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 0.45;
+  }
+}
+
+.cue-drift {
+  animation: cue-drift 2.2s ease-in-out infinite;
+}
+
+/* ============================================
+   Primitivas de las secciones de contenido
+   Compartidas por los componentes de src/components/sections
+   ============================================ */
+
+/* Contenedor: medida de lectura acotada y aire lateral coherente */
+.shell {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.shell-narrow {
+  max-width: 52rem;
+}
+
+/* Separación vertical: más aire entre secciones que dentro de ellas */
+.band {
+  padding-block: clamp(4.5rem, 9vw, 8.5rem);
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* Filete: separa bloques sin cerrarlos en cajas */
+.hairline {
+  height: 1px;
+  background: currentColor;
+  opacity: 0.16;
+}
+
+/* Etiqueta de sección. Uso limitado: una por sección como máximo. */
+.kicker {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Titulares de sección (display) y medida de párrafo */
+.heading-section {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  font-size: clamp(1.95rem, 4.6vw, 3.1rem);
+  text-wrap: balance;
+}
+
+.heading-sub {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  text-wrap: balance;
+}
+
+.prose-measure {
+  max-width: 68ch;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .prose-measure {
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+}
+
+/* Motivo burbuja: reservado al asistente (demo y transcripciones) */
+.bubble {
+  border-radius: 1.15rem;
+  padding: 0.8rem 1.05rem;
+  font-size: 0.975rem;
+  line-height: 1.55;
+}
+
+.bubble-patient {
+  border-bottom-right-radius: 0.3rem;
+}
+
+.bubble-assistant {
+  border-bottom-left-radius: 0.3rem;
+}
+
+/* ============================================
+   Accesibilidad: prefers-reduced-motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
