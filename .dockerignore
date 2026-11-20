@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.env
+.env.*
+.verify-04
+.rate
+debug.log
+*.md

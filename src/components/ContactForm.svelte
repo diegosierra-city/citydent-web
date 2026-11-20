@@ -2,13 +2,16 @@
   /**
    * ContactForm — solicitud de propuesta (§3.13 de la propuesta aprobada).
    *
-   * Envia JSON a /api/contacto.php (PHP en el mismo hosting compartido).
-   * Incluye honeypot anti-spam y validación con zod en cliente;
-   * el servidor revalida siempre (nunca confiar en el cliente).
+   * Envia JSON al endpoint público de la API (POST /web/contacto), que guarda
+   * la solicitud y avisa por correo. Incluye honeypot anti-spam y validación
+   * con zod en cliente; el servidor revalida siempre (nunca confiar en el cliente).
    *
    * En error se conserva todo lo escrito: el visitante no repite el formulario.
    */
   import { z } from 'zod';
+
+  const CONTACT_ENDPOINT =
+    import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? 'https://api.citydent.app/web/contacto';
 
   const CHANNELS = [
     { value: 'web', label: 'En la web de mi clínica' },
@@ -111,7 +114,7 @@
     formError = '';
 
     try {
-      const res = await fetch('/api/contacto.php', {
+      const res = await fetch(CONTACT_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -181,7 +184,7 @@
   <form
     class="rounded-[1.5rem] border border-ink/12 bg-white p-6 shadow-[0_30px_80px_-50px_rgba(12,38,65,0.7)] md:p-9"
     method="post"
-    action="/api/contacto.php"
+    action={CONTACT_ENDPOINT}
     onsubmit={handleSubmit}
     novalidate
     aria-describedby="form-feedback"
