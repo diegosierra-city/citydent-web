@@ -30,8 +30,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 
 /* ---------------------------------------------------------------- config -- */
 
-const RECIPIENT      = 'hola@citydent.mx';          // cambiar por email real
-const FROM_ADDRESS   = 'no-reply@citydent.mx';
+const RECIPIENT      = 'soporte@citydent.app';      // el buzón debe existir en el hosting
+const FROM_ADDRESS   = 'no-reply@citydent.app';
 const FROM_NAME      = 'CityDent Web';
 const RATE_FILE_DIR  = __DIR__ . '/../.rate';        // fuera del docroot idealmente
 const MAX_PER_HOUR   = 5;

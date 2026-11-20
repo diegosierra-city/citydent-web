@@ -7,8 +7,8 @@ import tailwind from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   // Dominio de despliegue de la landing. Alimenta canonical y sitemap: la app
-  // vive en otro dominio (citydent.app) y no debe aparecer aquí.
-  site: 'https://citydent.cityciudad.com',
+  // vive en api.citydent.app y no debe aparecer aquí.
+  site: 'https://citydent.app',
   output: 'static',
   server: { host: true },
   integrations: [
