@@ -6,7 +6,7 @@ RUN bun install --frozen-lockfile
 COPY . .
 # .env.production no viaja en el repo: los valores públicos llegan como build args.
 ARG PUBLIC_CHAT_WIDGET_URL=https://api.citydent.app/cc-widget.js
-ARG PUBLIC_CHAT_WIDGET_ID=1c7c86371b0c40a5abd20c23f057906e
+ARG PUBLIC_CHAT_WIDGET_ID=bf64a51d947945e98d74ea66b6a66797
 ARG PUBLIC_CONTACT_ENDPOINT=https://api.citydent.app/web/contacto
 ENV PUBLIC_CHAT_WIDGET_URL=$PUBLIC_CHAT_WIDGET_URL \
     PUBLIC_CHAT_WIDGET_ID=$PUBLIC_CHAT_WIDGET_ID \
