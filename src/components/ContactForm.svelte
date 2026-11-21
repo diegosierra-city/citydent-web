@@ -9,6 +9,8 @@
    * En error se conserva todo lo escrito: el visitante no repite el formulario.
    */
   import { z } from 'zod';
+  import { tick } from 'svelte';
+  import { scrollToTarget } from '../lib/scroll';
 
   const CONTACT_ENDPOINT =
     import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? 'https://api.citydent.app/web/contacto';
@@ -64,6 +66,29 @@
   let status = $state(STATUS.IDLE);
   let formError = $state('');
   let fieldErrors = $state({});
+  let successPanel = $state(null);
+  let feedbackPanel = $state(null);
+
+  /* El panel de éxito sustituye a un formulario mucho más alto: sin este
+     scroll quedaría por encima del viewport tras el envío. */
+  async function showSuccess() {
+    status = STATUS.SUCCESS;
+    await tick();
+    if (!successPanel) return;
+    scrollToTarget(successPanel);
+    successPanel.focus({ preventScroll: true });
+  }
+
+  /* El aviso de error queda junto al botón de envío, fuera de pantalla si el
+     formulario es más alto que el viewport: hay que traerlo a la vista. */
+  async function showError() {
+    await tick();
+    if (!feedbackPanel) return;
+    const rect = feedbackPanel.getBoundingClientRect();
+    if (rect.bottom > window.innerHeight - 12 || rect.top < 88) {
+      scrollToTarget(feedbackPanel, 120);
+    }
+  }
 
   const isLoading = $derived(status === STATUS.LOADING);
   const wantsAgendas = $derived(agendas === 'si');
@@ -103,7 +128,7 @@
 
     // Honeypot: si viene relleno, fingir éxito y no enviar nada.
     if (honeypot !== '') {
-      status = STATUS.SUCCESS;
+      await showSuccess();
       return;
     }
 
@@ -132,25 +157,29 @@
       const data = await res.json();
 
       if (res.ok && data.ok) {
-        status = STATUS.SUCCESS;
         name = clinic = email = phone = channels = agendas = agendasCount = software = message = '';
+        await showSuccess();
       } else {
         status = STATUS.ERROR;
         formError =
           data?.error ??
           'No se ha podido enviar la solicitud. Inténtalo de nuevo; la información que has escrito se mantiene en el formulario.';
+        await showError();
       }
     } catch {
       status = STATUS.ERROR;
       formError =
         'No se ha podido enviar la solicitud. Inténtalo de nuevo; la información que has escrito se mantiene en el formulario.';
+      await showError();
     }
   }
 </script>
 
 {#if status === STATUS.SUCCESS}
   <div
-    class="rounded-[1.4rem] border border-brand-teal/40 bg-brand-teal/[0.07] p-7 text-center md:p-10"
+    bind:this={successPanel}
+    tabindex="-1"
+    class="rounded-[1.5rem] border border-brand-teal/40 bg-white p-7 text-center shadow-[0_30px_80px_-50px_rgba(12,38,65,0.7)] focus:outline-none md:p-10"
     role="status"
     aria-live="polite"
   >
@@ -381,6 +410,7 @@
 
     <div
       id="form-feedback"
+      bind:this={feedbackPanel}
       aria-live="polite"
       class:visible={status === STATUS.ERROR}
       class:invisible={status !== STATUS.ERROR}
