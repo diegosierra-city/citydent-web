@@ -1,7 +1,5 @@
 /**
- * Regresión visual y funcional de la apertura continua: el póster del
- * Hero (hero.webp) es el fotograma inicial y la secuencia entra en
- * fundido al iniciar el scroll.
+ * Regresión visual y funcional de la apertura continua desde el fotograma cero del video.
  *
  * Controla Chrome headless por CDP (WebSocket nativo, sin dependencias):
  * navega a la página, salta a varios puntos de la pista de scroll y
@@ -145,10 +143,39 @@ try {
   };
   const sceneSelector = '.opening[data-scene-seq]';
   const canvasFrame = `Number(document.querySelector('${sceneSelector} [data-seq-canvas]').dataset.frame)`;
-  /* Con póster estático el cabezal 0 pertenece a la foto del Hero: el
-     lienzo se mide por su opacidad inline, no por el fotograma pintado. */
-  const canvasHidden = `document.querySelector('${sceneSelector} [data-seq-canvas]').style.opacity === '0'`;
   const canvasShown = `document.querySelector('${sceneSelector} [data-seq-canvas]').style.opacity === '1'`;
+  const canvasAtStart = `${canvasShown} && ${canvasFrame} === 0`;
+  const checkPosterMatch = async () => {
+    const result = await evalJS(`(() => {
+      const section = document.querySelector('${sceneSelector}');
+      const poster = section.querySelector('[data-seq-poster]');
+      const canvas = section.querySelector('[data-seq-canvas]');
+      const expected = document.createElement('canvas');
+      expected.width = canvas.width;
+      expected.height = canvas.height;
+      const context = expected.getContext('2d');
+      const position = getComputedStyle(poster).objectPosition;
+      const [x, y] = position.split(' ').map(value => parseFloat(value) / 100);
+      const scale = Math.max(canvas.width / poster.naturalWidth, canvas.height / poster.naturalHeight);
+      const width = poster.naturalWidth * scale, height = poster.naturalHeight * scale;
+      context.drawImage(poster, (canvas.width - width) * x, (canvas.height - height) * y, width, height);
+      const actual = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+      let difference = 0;
+      for (let i = 0; i < pixels.length; i++) difference += Math.abs(actual[i] - pixels[i]);
+      return { difference: difference / pixels.length, position,
+        canvasPosition: getComputedStyle(canvas).objectPosition,
+        source: poster.getAttribute('src'),
+        frameSource: section.dataset.seqBase + '/frame-000.webp?v=' + section.dataset.seqVersion,
+        dimensions: [poster.naturalWidth, poster.naturalHeight],
+        attributes: [Number(poster.getAttribute('width')), Number(poster.getAttribute('height'))] };
+    })()`);
+    assert.equal(result.source, result.frameSource, 'El póster usa exactamente el fotograma cero y su versión');
+    assert.equal(result.position, result.canvasPosition, 'El póster y el canvas comparten encuadre');
+    assert.deepEqual(result.attributes, result.dimensions, 'Las dimensiones declaradas coinciden con el recurso');
+    assert.ok(result.difference < 0.5, `El paso del póster al canvas no cambia la imagen (${result.difference})`);
+    return result;
+  };
   const geometry = () => evalJS(`(() => {
     const el = document.querySelector('${sceneSelector}');
     return {
@@ -231,26 +258,24 @@ try {
   for (const [label, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844]]) {
     await setViewport(width, height);
     await load();
-    await waitFor(canvasHidden);
+    await waitFor(canvasAtStart);
     await sleep(2000);
     const g = await geometry();
     assert.equal(g.top, 0, 'La pista arranca bajo el Hero, como fotograma inicial');
-    assert.match(await evalJS(`document.querySelector('#inicio [data-seq-poster]').getAttribute('src')`), /\/img\/hero\.webp/,
-      'El póster del fotograma inicial es hero.webp');
+    const posterMatch = await checkPosterMatch();
     assert.equal(g.width, width);
     assert.equal(g.height, height);
     assert.equal(g.overflow, false);
     assert.equal(g.count, 240, 'Una sola secuencia continua para toda la apertura');
     assert.equal(g.canvases, 1, 'Un solo canvas para todos los mensajes de la apertura');
     await shot(`${label}-continuo-hero`);
-    /* El vídeo debe aparecer en fundido al empezar a scrollear abajo. */
-    await evalJS(`scrollTo(0, 80)`);
-    await waitFor(canvasShown);
-    assert.ok(Number(await evalJS(`document.querySelector('.opening[data-scene-seq] [data-seq-canvas]').dataset.targetFrame`)) >= 1,
-      'El primer scroll ya mueve el cabezal sobre la secuencia');
-    await shot(`${label}-continuo-fundido`);
+    await evalJS(`scrollTo(0, ${scrollForFrame(g, 1)})`);
+    await waitFor(`${canvasFrame} === 1`);
+    assert.equal(await evalJS(canvasShown), true, 'El segundo fotograma continúa sobre el mismo canvas');
+    await shot(`${label}-continuo-frame-001`);
     await evalJS(`scrollTo(0, 0)`);
-    await waitFor(canvasHidden);
+    await waitFor(canvasAtStart);
+    await checkPosterMatch();
     /* Punto medio de la pista: el zoom-out debe ir por la mitad del vídeo. */
     await evalJS(`scrollTo(0, ${scrollForFrame(g, 120)})`);
     await waitFor(`${canvasFrame} === 120`);
@@ -258,13 +283,13 @@ try {
     assert.equal(await evalJS(`Number(document.querySelector('.opening[data-scene-seq] [data-seq-canvas]').dataset.frame)`), 120);
     await shot(`${label}-continuo-medio`);
     await evalJS(`scrollTo(0, 0)`);
-    await waitFor(canvasHidden);
+    await waitFor(canvasAtStart);
     const scale = await loadScale();
     const down = await traverse(g.top, g.top + g.travel, 12500 * scale);
     await waitFor(`${canvasFrame} === 239`);
     await shot(`${label}-continuo-final`);
     const up = await traverse(g.top + g.travel, g.top, 12500 * scale);
-    await waitFor(canvasHidden);
+    await waitFor(canvasAtStart);
     assert.equal(down.blanks + up.blanks, 0);
     assert.equal(down.movingStage + up.movingStage, 0, 'El fondo no se desliza como un segundo panel');
     scrubOk(down, g.count, 'La apertura avanza');
@@ -275,7 +300,7 @@ try {
       await shot(`${label}-${name}`);
     }
     assert.deepEqual(await evalJS('window.__sequenceErrors'), []);
-    report.push({ label, ...g, down, up });
+    report.push({ label, ...g, posterMatch, down, up });
     console.log(`${label}: scrub completo, avance ${down.distinct}/${down.samples}, retroceso ${up.distinct}/${up.samples}, vacíos ${down.blanks + up.blanks}`);
     await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
     await waitFor("!document.querySelector('[data-seq-active]')");
@@ -360,7 +385,7 @@ try {
     await send('Network.setBlockedURLs', { urls: [pattern] });
     await load();
     await waitFor("document.querySelector('.opening[data-scene-seq]').hasAttribute('data-seq-active')");
-    await waitFor(canvasHidden);
+    await waitFor(canvasAtStart);
     const g = await geometry();
     for (const frame of [missingFrame - 1, missingFrame, missingFrame + 1]) {
       /* El balanceo se mantiene hasta que el fotograma esperado esté
@@ -429,7 +454,7 @@ try {
     assert.match(secondFallback.last, /secuencia-04\/frame-239/);
     await evalJS("scrollTo(0, document.querySelector('.care-story').offsetTop)");
     await shot(`${mode}-02`);
-    assert.match(fallback.poster, /hero\.webp/, 'Sin JS ni motion el fotograma inicial es la foto del Hero');
+    assert.match(fallback.poster, /secuencia-04\/frame-000\.webp/, 'Sin JS ni motion el póster sigue siendo el fotograma cero del video');
     assert.match(fallback.end, /frame-096/);
     await shot(mode);
     report.push({ label: mode, ...fallback });
@@ -437,7 +462,7 @@ try {
   await send('Emulation.setScriptExecutionDisabled', { value: false });
   writeFileSync(join(OUT_DIR, 'results.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
-  console.log('OK: póster Hero + secuencia única de apertura con fundido, carga diferida del footer, avance, retroceso, píxeles, móvil, red lenta y fallbacks.');
+  console.log('OK: póster idéntico al fotograma cero, secuencia continua, carga diferida del footer, avance, retroceso, píxeles, móvil, red lenta y fallbacks.');
 } finally {
   ws?.close();
   /* En Windows chrome.kill() solo termina el proceso padre: los hijos
