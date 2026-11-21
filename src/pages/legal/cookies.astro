@@ -1,0 +1,82 @@
+---
+import Legal from '../../layouts/Legal.astro';
+---
+
+<Legal
+  title="Política de cookies | CityDent"
+  description="Política de cookies y almacenamiento local de CityDent: qué se guarda en tu navegador, con qué finalidad y cómo eliminarlo."
+>
+  <div class="legal-prose">
+    <h1 class="heading-section">Política de cookies</h1>
+    <p class="mt-4 text-sm text-mist">Última actualización: 20 de noviembre de 2026.</p>
+
+    <h2>1. Qué usamos y qué no</h2>
+    <p>
+      El Sitio <strong>no utiliza cookies de analítica, de publicidad ni de redes sociales</strong>,
+      y no instala cookies de terceros con fines de seguimiento. Las fuentes tipográficas se
+      sirven desde el propio Sitio, por lo que la navegación no genera llamadas a proveedores
+      externos de fuentes.
+    </p>
+    <p>
+      Sólo empleamos almacenamiento técnico propio, exento de consentimiento conforme al
+      artículo 22.2 de la LSSI-CE por ser necesario para el funcionamiento del Sitio o para
+      un servicio solicitado expresamente por el usuario:
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Proveedor</th>
+          <th scope="col">Finalidad</th>
+          <th scope="col">Duración</th>
+          <th scope="col">Tipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>cd-cookie-notice-v1</code></td>
+          <td>citydent.app (propio)</td>
+          <td>Recordar que has cerrado el aviso de cookies para no volver a mostrarlo.</td>
+          <td>Persistente hasta que la elimines</td>
+          <td>Almacenamiento local técnico</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Además, el servidor puede registrar datos técnicos de conexión (como la dirección IP)
+      en registros de seguridad y operación; no son cookies ni se usan para perfilarte.
+    </p>
+
+    <h2>2. La demostración y el asistente</h2>
+    <p>
+      El asistente de la demo se sirve desde <strong>api.citydent.app</strong> dentro de una
+      ventana aislada (iframe). Hemos verificado en navegador que ese componente
+      <strong>no instala cookies ni almacenamiento local</strong>: la sesión de chat se gestiona
+      en el servidor y en memoria mientras la ventana está abierta. Al cargar la página, el
+      Sitio consulta la configuración pública del asistente en nuestro propio API; al abrir la
+      demo se crea una sesión de demostración con datos ficticios. Ninguna de esas conexiones
+      deposita identificadores de seguimiento en tu navegador.
+    </p>
+    <p>
+      Si en el futuro incorporamos cookies o almacenamiento no exento (por ejemplo, analítica),
+      actualizaremos esta política y solicitaremos tu consentimiento antes de instalarlos,
+      con opciones reales de aceptar, rechazar y configurar.
+    </p>
+
+    <h2>3. Cómo gestionar o eliminar el almacenamiento</h2>
+    <p>
+      Puedes borrar el almacenamiento local y las cookies desde la configuración de tu
+      navegador (apartados de privacidad, datos de sitios o almacenamiento). Ten en cuenta
+      que, si eliminas <code>cd-cookie-notice-v1</code>, el aviso volverá a mostrarse: es su
+      única función. Bloquear todo el almacenamiento no impide navegar por el Sitio ni leer
+      sus contenidos.
+    </p>
+
+    <h2>4. Más información y contacto</h2>
+    <p>
+      El tratamiento de datos personales asociado al Sitio y al servicio se describe en la
+      <a href="/legal/privacidad">Política de privacidad</a>. Para cualquier duda sobre cookies
+      o almacenamiento, escribe a <a href="mailto:soporte@citydent.app">soporte@citydent.app</a>.
+    </p>
+  </div>
+</Legal>

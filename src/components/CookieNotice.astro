@@ -1,0 +1,65 @@
+---
+/* Aviso informativo de cookies: la web no instala cookies de analítica ni
+   publicidad (verificado en navegador). Sólo almacenamiento técnico propio y,
+   al abrir la demo, la conexión con el asistente. No hay nada opcional que
+   rechazar, por eso el aviso informa y se cierra, sin muro de consentimiento. */
+---
+
+<div
+  data-cookie-notice
+  role="region"
+  aria-label="Aviso de cookies"
+  class="fixed inset-x-0 bottom-20 z-40 border-t border-white/15 bg-ink/95 text-white backdrop-blur-md lg:bottom-0"
+>
+  <div class="shell cookie-notice-shell flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+    <p class="text-sm leading-relaxed text-white/90">
+      Usamos almacenamiento técnico propio para que la web funcione y recordar este aviso.
+      No usamos cookies de analítica ni publicidad; solo al abrir la demo se conecta con
+      nuestro asistente.
+      <a href="/legal/cookies" class="underline underline-offset-3 hover:text-brand-teal">Política de cookies</a>.
+    </p>
+    <button
+      type="button"
+      data-cookie-notice-dismiss
+      class="shrink-0 rounded-full border border-white/30 px-5 py-2 text-sm font-semibold transition-colors hover:border-brand-teal hover:text-brand-teal"
+    >
+      Entendido
+    </button>
+  </div>
+</div>
+
+<style>
+  /* .shell vive fuera de las capas de Tailwind y su padding-inline gana a las
+     utilidades pr-*: el hueco para el botón del widget se reserva aquí.
+     21rem = ancho máximo del launcher (18rem) + su margen (1.25rem) + aire. */
+  @media (min-width: 1024px) {
+    .cookie-notice-shell {
+      padding-right: 21rem;
+    }
+  }
+</style>
+
+<script>
+  const KEY = 'cd-cookie-notice-v1';
+  const bar = document.querySelector<HTMLElement>('[data-cookie-notice]');
+  const dismiss = document.querySelector<HTMLButtonElement>('[data-cookie-notice-dismiss]');
+
+  const read = () => {
+    try {
+      return localStorage.getItem(KEY);
+    } catch {
+      return null;
+    }
+  };
+
+  if (read()) bar?.remove();
+
+  dismiss?.addEventListener('click', () => {
+    try {
+      localStorage.setItem(KEY, '1');
+    } catch {
+      /* Sin almacenamiento disponible el aviso vuelve a aparecer: es informativo. */
+    }
+    bar?.remove();
+  });
+</script>

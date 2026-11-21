@@ -1,5 +1,31 @@
 @import "tailwindcss";
 
+/* Fuentes auto-alojadas (subset latin, variables 400-700): sin llamadas a
+   Google Fonts, la web no contacta con terceros antes de consentir nada. */
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/jost-latin-var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-var.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/source-sans-3-latin-italic-var.woff2') format('woff2');
+}
+
 /* ============================================
    CityDent Design Tokens
    Marca: burbuja de chat + diente (docs/logo)
@@ -262,6 +288,86 @@ body {
 
 .bubble-assistant {
   border-bottom-left-radius: 0.3rem;
+}
+
+/* ============================================
+   Páginas legales: medida de lectura y jerarquía
+   ============================================ */
+
+.legal-prose {
+  max-width: 68ch;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--color-ink);
+}
+
+.legal-prose h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 2.5rem 0 0.9rem;
+}
+
+.legal-prose h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin: 1.8rem 0 0.6rem;
+}
+
+.legal-prose p {
+  margin: 0 0 1rem;
+}
+
+.legal-prose ul,
+.legal-prose ol {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.legal-prose ul {
+  list-style: disc;
+}
+
+.legal-prose ol {
+  list-style: decimal;
+}
+
+.legal-prose a {
+  color: var(--color-brand-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legal-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+}
+
+.legal-prose th,
+.legal-prose td {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.legal-prose th {
+  font-weight: 600;
+  background: color-mix(in srgb, var(--color-ink) 4%, transparent);
+}
+
+/* Datos que Diego debe rellenar antes de publicar: nunca inventados. */
+.legal-prose mark {
+  background: #fde68a;
+  color: var(--color-ink);
+  padding: 0 0.25rem;
 }
 
 /* ============================================

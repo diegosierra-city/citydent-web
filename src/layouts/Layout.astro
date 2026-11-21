@@ -5,6 +5,7 @@
  * Incluye: GSAP ScrollTrigger, Lenis smooth scroll, estructura HTML base
  */
 import '../styles/global.css';
+import CookieNotice from '../components/CookieNotice.astro';
 import { readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -24,7 +25,7 @@ interface Props {
 
 const {
   title = 'CityDent | Asistente de IA para clínicas dentales',
-  description = 'Responde consultas habituales en tu web y WhatsApp con CityDent. Prueba la demo y solicita una propuesta adaptada a tu clínica dental.',
+  description = 'Asistente de IA para clínicas dentales: consultas administrativas en web y WhatsApp, con calendario de citas opcional. Prueba la demo y compara los planes.',
   ogTitle = 'Lo más importante son tus pacientes. Conoce CityDent.',
   ogDescription = 'Un asistente de IA para apoyar la atención de tu clínica dental. Pruébalo en una demostración interactiva.',
   ogImage = '/img/hero.jpg',
@@ -44,8 +45,7 @@ const navLinks = [
 /* Pie (propuesta §8): sólo enlaces que resuelven a contenido real */
 const footerLinks = [
   { href: '#beneficios', label: 'Cómo te ayuda' },
-  { href: '#demo', label: 'Probar CityDent' },
-  { href: '#fundadoras', label: 'Clínicas fundadoras' },
+  { href: '#demo', label: 'Probar la demo' },
   { href: '#precios', label: 'Precios' },
   { href: '#puesta-en-marcha', label: 'Puesta en marcha' },
   { href: '#preguntas', label: 'Preguntas frecuentes' },
@@ -85,15 +85,7 @@ const footerLinks = [
     <meta name="twitter:image" content={ogImage} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
-    <!-- Preconnect para performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- Fuentes: Jost (display geométrica, eco de Futura del logo) + Source Sans 3 (body) -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Fuentes auto-alojadas en /public/fonts (ver global.css): sin CDN de terceros -->
 
     <!--
       GSAP, ScrollTrigger y Lenis se cargan desde npm (no CDN):
@@ -127,7 +119,7 @@ const footerLinks = [
               href="#demo"
               class="gradient-cta rounded-full px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.03]"
             >
-              Probar CityDent
+              Probar la demo
             </a>
           </li>
         </ul>
@@ -161,7 +153,7 @@ const footerLinks = [
         ))}
         <li class="mt-2 px-3">
           <a href="#demo" class="gradient-cta block rounded-full px-5 py-3 text-center font-semibold text-white">
-            Probar CityDent
+            Probar la demo
           </a>
         </li>
       </ul>
@@ -226,13 +218,24 @@ const footerLinks = [
         </div>
 
         <div class="mt-6 border-t border-white/20 pt-5 lg:mt-12">
-          <p class="text-xs text-white/80">
+          <nav aria-label="Información legal">
+            <ul class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-white/85">
+              <li><a href="/legal/aviso-legal" class="inline-flex min-h-11 items-center transition-colors hover:text-brand-teal">Aviso legal</a></li>
+              <li><a href="/legal/privacidad" class="inline-flex min-h-11 items-center transition-colors hover:text-brand-teal">Privacidad</a></li>
+              <li><a href="/legal/cookies" class="inline-flex min-h-11 items-center transition-colors hover:text-brand-teal">Cookies</a></li>
+              <li><a href="/legal/condiciones" class="inline-flex min-h-11 items-center transition-colors hover:text-brand-teal">Condiciones del servicio</a></li>
+              <li><a href="mailto:soporte@citydent.app" class="inline-flex min-h-11 items-center transition-colors hover:text-brand-teal">soporte@citydent.app</a></li>
+            </ul>
+          </nav>
+          <p class="mt-2 text-xs text-white/80">
             © {new Date().getFullYear()} CityDent. Todos los derechos reservados.
           </p>
         </div>
       </div>
       </div>
     </footer>
+
+    <CookieNotice />
 
     <style>
       .footer-stage { position: relative; display: flex; align-items: flex-end; min-height: 100svh; }
