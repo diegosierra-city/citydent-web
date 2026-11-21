@@ -4,41 +4,39 @@
  *
  * El martes es el momento autorado de esta banda: al hacer scroll, el panel
  * «sin CityDent» se apaga y el «con CityDent» se enciende (reversible).
- * Los beneficios se presentan como lista editorial con filetes, no como
- * rejilla de tarjetas: función → resultado → evidencia → ejemplo.
  */
 const benefits = [
   {
-    title: 'Recepción deja de repetir lo que ya está escrito',
+    title: 'Menos consultas repetitivas en recepción',
     result:
-      'Horarios, ubicación, servicios e información práctica, respondidos con el contenido que facilita tu clínica.',
-    evidence:
-      'Base de conocimiento configurada y revisada contigo antes de la puesta en marcha.',
+      'El asistente ayuda con horarios, ubicación, servicios e información práctica a partir del contenido de tu clínica.',
+    detail:
+      'Revisamos contigo esa información antes de la puesta en marcha.',
     example: '¿Abrís los sábados?',
   },
   {
-    title: 'De la consulta a la cita reservada',
+    title: 'Un camino más sencillo para pedir cita',
     result:
-      'Con tu agenda conectada, el asistente mira las horas que quedan libres, propone una y el paciente la confirma con un botón. Si prefieres seguir con tu sistema actual, explica cómo reservar y entrega tu enlace.',
-    evidence:
-      'Lee la disponibilidad real de tu agenda y nunca escribe en ella: la reserva la pulsa el paciente.',
+      'Si eliges la agenda opcional, la configuramos para tu clínica. Una vez habilitada, el asistente consulta disponibilidad y propone una cita que solo se reserva tras la confirmación del paciente.',
+    detail:
+      'No es una integración automática con cualquier software dental. Si mantienes tu sistema actual, podemos orientar al paciente hacia tu enlace de reservas.',
     example: 'Quiero una primera visita. ¿Cómo la pido?',
   },
   {
-    title: 'Tu clínica responde donde tus pacientes ya están',
+    title: 'Web y WhatsApp, incluidos',
     result:
-      'En tu web, responde y reserva. En WhatsApp, responde con la información de tu clínica dentro de la ventana de atención del canal y sin campañas proactivas.',
-    evidence:
-      'Widget web conectado y canal oficial de WhatsApp activables por módulo.',
+      'Tus pacientes pueden consultar la información de la clínica en ambos canales. Con la agenda habilitada, confirman la reserva con un botón en la web o mediante un enlace desde WhatsApp.',
+    detail:
+      'Configuramos ambos canales contigo. En WhatsApp, la atención se ajusta a la ventana permitida por el canal, sin campañas proactivas.',
     example: '¿Cómo llego a la clínica?',
   },
   {
-    title: 'Contesta como contestarías tú',
+    title: 'Una voz acorde con tu clínica',
     result:
-      'Tono, preguntas frecuentes e indicaciones configuradas para presentar tus servicios como lo haría tu equipo.',
-    evidence:
-      'Instrucciones y personalidad del asistente definidas en la implementación y validadas contigo.',
-    example: 'Explicar el proceso de una primera visita sin emitir ninguna valoración clínica.',
+      'Adaptamos el tono, las preguntas frecuentes y las indicaciones para presentar tus servicios de forma cercana y clara.',
+    detail:
+      'Tu equipo revisa las respuestas de ejemplo y las instrucciones del asistente.',
+    example: '¿Qué necesito llevar a mi primera visita?',
   },
 ];
 ---
@@ -54,11 +52,11 @@ const benefits = [
       <article class="scene relative overflow-hidden rounded-[1.4rem] border border-ink/12 bg-ink/[0.03] p-6 md:p-7">
         <p class="kicker text-mist">Martes, 19:47 · Sin CityDent</p>
         <p class="bubble bubble-patient mt-4 inline-block max-w-full bg-white text-ink shadow-[0_10px_28px_-20px_rgba(12,38,65,0.6)]">
-          ¿Tenéis hueco el jueves para una urgencia?
+          ¿Cómo puedo pedir una primera visita?
         </p>
         <p class="mt-5 text-base leading-relaxed text-mist">
-          El mensaje espera hasta mañana. Mañana, el paciente ya ha reservado
-          donde le respondieron anoche.
+          Si recepción ya ha cerrado, la consulta puede quedar pendiente hasta
+          el siguiente día de atención.
         </p>
         <div class="veil veil-off absolute inset-0 bg-ink" data-veil="sin" aria-hidden="true"></div>
       </article>
@@ -66,25 +64,25 @@ const benefits = [
       <article class="scene relative overflow-hidden rounded-[1.4rem] border border-brand-teal/35 bg-brand-teal/[0.07] p-6 md:p-7" data-panel="con">
         <p class="kicker text-brand-deep">Martes, 19:47 · Con CityDent en tu web</p>
         <p class="bubble bubble-patient mt-4 inline-block max-w-full bg-white text-ink shadow-[0_10px_28px_-20px_rgba(12,38,65,0.6)]">
-          ¿Tenéis hueco el jueves para una urgencia?
+          ¿Cómo puedo pedir una primera visita?
         </p>
         <p class="bubble bubble-assistant mt-3 max-w-full gradient-bubble text-ink" data-reply>
-          Ahora mismo no hay nadie en recepción, pero te respondo yo: te explico
-          qué hacer en una urgencia, nuestros horarios y te propongo una hora
-          libre de la agenda.
+          Soy el asistente de IA de la clínica. Puedo consultar las horas libres
+          para una primera visita. ¿Qué día te viene bien? La reserva se hará
+          cuando confirmes la hora que elijas.
         </p>
         <p class="mt-5 text-base leading-relaxed text-ink">
-          El mismo mensaje recibe respuesta en segundos: horarios, qué hacer en
-          una urgencia y una hora libre de tu agenda. Por la mañana, recepción
-          abre el día con la cita cerrada, no con un mensaje olvidado.
+          El paciente puede avanzar con su consulta sin esperar a que recepción
+          retome el mensaje. La reserva solo se realiza con la agenda habilitada
+          y tras su confirmación.
         </p>
         <div class="veil veil-on absolute inset-0 bg-paper" data-veil="con" aria-hidden="true"></div>
       </article>
     </div>
 
     <p class="mt-5 text-sm text-mist" data-reveal="soft">
-      Escena ilustrativa. Tu propuesta incluirá los canales y el alcance reales
-      de tu configuración.
+      Ejemplo con calendario de citas conectado, no una reserva real. El resultado
+      depende de la disponibilidad y de la confirmación del paciente.
     </p>
 
     <!-- Beneficios: lista editorial con columna de contexto persistente -->
@@ -93,11 +91,11 @@ const benefits = [
         <div class="lg:sticky lg:top-28">
           <p class="kicker text-brand-deep" data-reveal="up">Cómo te ayuda</p>
           <p class="mt-4 font-display text-2xl leading-snug text-ink md:text-[1.75rem]" data-reveal="up">
-            Cuatro cosas que cambian en la clínica, y qué las hace posibles.
+            Información práctica y un siguiente paso para tus pacientes.
           </p>
           <p class="mt-6 text-base leading-relaxed text-mist" data-reveal="up">
-            Cada bloque dice el resultado, la evidencia que lo sostiene y una
-            pregunta real que lo activa.
+            Desde una duda sobre horarios hasta una primera visita: apoyo en
+            las consultas que recibe tu clínica cada día.
           </p>
         </div>
       </div>
@@ -110,8 +108,8 @@ const benefits = [
               {benefit.result}
             </p>
             <p class="mt-4 text-sm leading-relaxed text-ink">
-              <span class="font-semibold text-brand-deep">Evidencia:</span>
-              {benefit.evidence}
+              <span class="font-semibold text-brand-deep">En tu clínica:</span>
+              {benefit.detail}
             </p>
             <p class="bubble bubble-patient mt-4 inline-block max-w-full bg-ink/[0.05] text-ink">
               «{benefit.example}»

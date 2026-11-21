@@ -62,8 +62,8 @@
           Escribe cuántas consultas se quedaron sin respuesta la última semana.
         </p>
         <p class="mt-3 text-sm leading-relaxed text-mist">
-          En tu propuesta valoramos esas ocasiones con el ticket medio de tu
-          clínica.
+          Estimación si se repite el mismo volumen cada semana. No equivale a
+          pacientes perdidos ni a ingresos garantizados.
         </p>
       </div>
     </div>
@@ -153,7 +153,7 @@
               </svg>
               Reservar esta hora
             </span>
-            <p class="mt-2.5 text-xs text-mist">La propuesta caduca a los 30 minutos.</p>
+            <p class="mt-2.5 text-xs text-mist">La disponibilidad se comprueba de nuevo al confirmar.</p>
           </div>
         </div>
 
@@ -162,8 +162,8 @@
         </p>
 
         <p class="bubble bubble-assistant self-start max-w-[92%] gradient-bubble text-ink" data-bubble="assistant">
-          Listo, Laura. Primera visita este sábado a las 10:30. Para cambiarla,
-          llama al 91 555 28 47.
+          Tu primera visita está confirmada para este sábado a las 10:30.
+          Si necesitas cambiarla, puedes solicitarlo desde el asistente.
         </p>
       </div>
 
@@ -228,9 +228,7 @@
     }
 
     const yearly = Math.round(Math.min(weekly, 9999) * 52);
-    result.textContent = `${yearly.toLocaleString('es-ES')} ${
-      yearly === 1 ? 'vez' : 'veces'
-    } al año en que un paciente no encontró respuesta en tu clínica.`;
+    result.textContent = `${yearly.toLocaleString('es-ES')} consultas sin respuesta al año si se mantiene ese ritmo.`;
   };
 
   input?.addEventListener('input', update);

@@ -8,7 +8,7 @@ import Confianza from '../components/sections/Confianza.astro';
 import Precios from '../components/sections/Precios.astro';
 import Preguntas from '../components/sections/Preguntas.astro';
 import Cierre from '../components/sections/Cierre.astro';
-import { existsSync, readdirSync, statSync } from 'node:fs';
+import { readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 /* Apertura continua: una sola secuencia de 240 fotogramas extraída del
@@ -21,26 +21,14 @@ const seqVersion = Math.trunc(statSync(join(seqDir, 'frame-000.webp')).mtimeMs).
 const frameSrc = (i: number) => `/img/secuencia-04/frame-${String(i).padStart(3, '0')}.webp?v=${seqVersion}`;
 /* Fotograma representativo de cada pausa de lectura sobre la misma pista. */
 const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
-/* Póster del Hero: abre la pista como fotograma inicial estático. */
-const heroPath = join(process.cwd(), 'public/img/hero.webp');
-if (!existsSync(heroPath)) throw new Error('Falta public/img/hero.webp. Ejecuta scripts/prepare-assets.mjs.');
-const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toString(36)}`;
 ---
 
 <Layout>
-  <!-- ============================================
-       APERTURA · #inicio (propuesta §4.1)
-       Un único canvas sticky para las cuatro secciones. El póster
-       es hero.webp: actúa de fotograma inicial bajo el mensaje del
-       Hero y la secuencia de 06.mp4 entra en fundido al iniciar el
-       scroll abajo. Sin JS o con movimiento reducido, el póster y
-       los fotogramas de fallback mantienen toda la lectura.
-       ============================================ -->
+  <!-- El póster comparte fotograma y encuadre con el canvas para evitar saltos al cargar. -->
   <div
     id="inicio"
     class="opening relative isolate bg-ink"
     data-scene-seq
-    data-seq-static-poster
     data-seq-base="/img/secuencia-04"
     data-seq-count={seqCount}
     data-seq-version={seqVersion}
@@ -49,11 +37,11 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
       <!-- Póster: la foto del gabinete abre la pista (LCP). -->
       <img
         data-seq-poster
-        src={heroUrl}
+        src={frameSrc(0)}
         alt="Profesional de una clínica dental sonríe con protección facial y prepara sus instrumentos, vista desde la perspectiva del paciente"
-        class="sequence-visual hero-poster absolute inset-0 h-full w-full object-cover"
-        width="2096"
-        height="1184"
+        class="sequence-visual absolute inset-0 h-full w-full object-cover"
+        width="1920"
+        height="960"
         decoding="async"
         fetchpriority="high"
       />
@@ -90,10 +78,9 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
           </h1>
 
           <p class="text-shadow-hero mt-5 text-base leading-relaxed text-white/90 sm:text-lg">
-            CityDent atiende las consultas habituales con la información de tu
-            clínica, en tu web y en WhatsApp. En tu web, además, mira las horas
-            libres de tu agenda y cierra la cita mientras tu equipo cuida de
-            quien está en el sillón.
+            CityDent responde consultas administrativas en tu web y WhatsApp con
+            la información de tu clínica. Añade el calendario de citas para
+            ofrecer horas disponibles y dejar que el paciente confirme su reserva.
           </p>
 
           <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -101,7 +88,7 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
               href="#demo"
               class="gradient-cta rounded-full px-7 py-3.5 text-center font-semibold text-white shadow-lg shadow-brand-blue/25 transition-transform hover:scale-[1.03]"
             >
-              Probar CityDent
+              Probar la demo
             </a>
             <a
               href="#precios"
@@ -116,13 +103,13 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
           </p>
 
           <p class="text-shadow-hero mt-5 text-xs font-medium tracking-wide text-white/70">
-            Hecho para clínicas dentales · Reserva en tu agenda desde tu web ·
+            Web y WhatsApp · Calendario de citas opcional ·
             Puesta en marcha acompañada
           </p>
 
           <!-- Invitación al scroll -->
           <p class="text-shadow-hero mt-7 flex items-center gap-2 text-sm font-medium text-white/85">
-            Descubre cuánto te cuesta no responder.
+            Descubre cómo puede ayudar a tu equipo.
             <svg
               class="cue-drift h-4 w-4 text-brand-teal"
               fill="none"
@@ -237,17 +224,11 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
 
   </div>
 
-  <!-- ============================================
-       RECORRIDO DE VENTA (propuesta §3.2–§3.13)
-       Orden del embudo: coste → proyección → prueba →
-       contraste → límites → fundadoras → precios →
-       puesta en marcha → preguntas → contacto.
-       ============================================ -->
-  <Problema />
   <Demo />
+  <Problema />
   <Beneficios />
-  <Confianza />
   <Precios />
+  <Confianza />
   <Preguntas />
   <Cierre />
 
@@ -263,11 +244,6 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
   /* Encuadre: el vídeo hace el zoom-out; en vertical el recorte 2:1 es tan
      estrecho que el lienzo debe seguir a los rostros con un paneo suave. */
   .sequence-visual { object-position: var(--sequence-x, 54%) 40%; }
-  /* El póster del Hero abre la pista con encuadre propio: rostro
-     arriba y al margen del paneo de los fotogramas 2:1. */
-  .hero-poster { object-position: 50% 30%; }
-  /* El vídeo entra y sale sobre el póster con un fundido corto. */
-  .opening-media [data-seq-canvas] { transition: opacity 0.45s ease; }
   .opening-patient-copy { align-items: flex-end; padding-bottom: 5rem; }
   img[data-seq-fallback] { object-position: var(--sequence-x, 52%) 40%; }
 
@@ -319,7 +295,6 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
   @media (min-width: 1024px) {
     /* En horizontal el cover ya abarca ambas figuras: sin paneo. */
     .sequence-visual { object-position: 50% 40%; }
-    .hero-poster { object-position: 50% 30%; }
     img[data-seq-fallback] { object-position: 50% 40%; }
   }
 </style>
@@ -337,9 +312,6 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
     if (!section || !canvas || !poster || !stage || !ctx || count < 2 || !window.createImageBitmap) return;
 
     const careStory = section.querySelector<HTMLElement>('.care-story');
-    /* Póster estático (Hero): el cabezal en 0 es la propia foto, no un
-       fotograma; el lienzo permanece oculto hasta empezar a scrollear. */
-    const staticPoster = section.hasAttribute('data-seq-static-poster');
     const source = (i: number) =>
       `${section.dataset.seqBase}/frame-${String(i).padStart(3, '0')}.webp?v=${section.dataset.seqVersion}`;
 
@@ -394,13 +366,6 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
        el último plano válido, no muestra un flash ni una imagen rota. */
     const draw = () => {
       if (disposed) return;
-      /* Con póster estático, el fotograma 0 lo firma la foto del Hero:
-         el lienzo se oculta con fundido y el vídeo entra con el primer
-         fotograma real del scrub (y se retira al volver al cabezal 0). */
-      if (staticPoster && target === 0) {
-        canvas.style.opacity = '0';
-        return;
-      }
       const frame = frames.get(target);
       if (!frame || disposed) return;
       if (drawn !== target) {
@@ -494,7 +459,6 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
     };
 
     section.dataset.seqActive = '';
-    if (staticPoster) canvas.style.opacity = '0';
     const playhead = { progress: 0 };
     const tween = gsap.to(playhead, {
       progress: 1,
@@ -537,17 +501,13 @@ const heroUrl = `/img/hero.webp?v=${Math.trunc(statSync(heroPath).mtimeMs).toStr
     const startLoading = () => {
       if (disposed || started) return;
       started = true;
-      /* Sin póster estático el lienzo arranca pintando el fotograma 0;
-         con él, la foto del Hero ya cubre el escenario y el canvas espera. */
-      if (!staticPoster) {
-        poster.decode().then(() => {
-          if (disposed || drawn >= 0) return;
-          paint(poster, poster.naturalWidth, poster.naturalHeight);
-          drawn = 0;
-          canvas.style.opacity = '1';
-          canvas.dataset.frame = '0';
-        }).catch(() => {});
-      }
+      poster.decode().then(() => {
+        if (disposed || drawn >= 0) return;
+        paint(poster, poster.naturalWidth, poster.naturalHeight);
+        drawn = 0;
+        canvas.style.opacity = '1';
+        canvas.dataset.frame = '0';
+      }).catch(() => {});
       download();
     };
     let observer: IntersectionObserver | undefined;

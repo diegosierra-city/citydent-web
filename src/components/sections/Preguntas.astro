@@ -1,13 +1,4 @@
 ---
-/**
- * Escena 12 (§3.12): manejo de objeciones en acordeón accesible.
- * Ordenadas por peso de objeción: sustitución, alcance, miedo clínico,
- * confianza, citas, reserva por WhatsApp, quién recibe las citas, canales,
- * integración, disponibilidad, error, precio, pago, prueba, salida y
- * permanencia. Las dos FAQ de reserva cierran los malentendidos más caros:
- * que se pueda reservar por WhatsApp y que las citas se repartan entre
- * varios profesionales.
- */
 const faqs = [
   {
     q: '¿CityDent sustituye a recepción?',
@@ -22,28 +13,32 @@ const faqs = [
     a: 'No debe usarse para diagnosticar, valorar síntomas ni recomendar tratamientos personalizados. La atención clínica corresponde a profesionales sanitarios.',
   },
   {
-    q: '¿Por qué debería confiar una IA a mis pacientes?',
-    a: 'Porque responde con la información revisada de tu clínica, reconoce sus límites y te enseña ambos antes de decidir: puedes interrogarlo tú mismo en la demo de esta página.',
+    q: '¿Cómo se prepara para mi clínica?',
+    a: 'Revisamos contigo horarios, servicios, preguntas frecuentes y tono de respuesta. Probamos las consultas habituales y las que debe dirigir a tu equipo antes de activar el servicio. La IA puede equivocarse; esa revisión no sustituye la supervisión de la clínica.',
   },
   {
     q: '¿Puede reservar citas directamente?',
-    a: 'Sí, en el widget de tu web. Con tu agenda conectada, consulta las horas que quedan libres, te propone una y el paciente la confirma con un botón; el asistente nunca escribe en tu agenda por su cuenta. Sin agenda conectada, explica cómo reservar y entrega tu enlace de reservas. Cambiar o cancelar una cita sigue haciéndolo tu equipo.',
+    a: 'Sí, si contratas el calendario de citas. Consulta disponibilidad por servicio y profesional, propone una hora y registra la reserva después de que el paciente la confirme. La disponibilidad se comprueba de nuevo al confirmar: una propuesta no bloquea la hora. Sin calendario, puede explicar cómo pedir cita o facilitar tu enlace de reservas.',
   },
   {
     q: '¿Puede reservar por WhatsApp?',
-    a: 'No. En WhatsApp responde con la información de tu clínica; la reserva con hora real funciona en el widget de tu web.',
+    a: 'Sí, con el calendario de citas configurado. La conversación comienza en WhatsApp y el paciente recibe un enlace para confirmar la reserva en una página web. No se reserva una hora solo por enviar un mensaje.',
   },
   {
-    q: '¿Quién recibe las citas?',
-    a: 'Hoy, un profesional por asistente: las citas caen en su calendario y de su hueco libre salen las horas. Si necesitas repartirlas entre varios, dínoslo y lo revisamos.',
+    q: '¿Puedo trabajar con varios profesionales?',
+    a: 'Sí. El calendario puede contemplar varios profesionales, cada uno con sus servicios y horarios. Acordamos cuántos se incluyen y probamos las reglas de disponibilidad antes de activar las reservas.',
+  },
+  {
+    q: '¿Puede ayudar a cambiar o cancelar una cita?',
+    a: 'El calendario permite preparar cambios y cancelaciones de las citas gestionadas por el asistente. El paciente debe confirmar la acción; no se ejecuta solo por mencionarla en el chat. Revisamos contigo el alcance y las condiciones que se comunicarán al paciente.',
   },
   {
     q: '¿Funciona en WhatsApp y en mi web?',
-    a: 'Puede configurarse en ambos canales según los módulos contratados. WhatsApp requiere activación y está sujeto a las condiciones del servicio; revisamos requisitos contigo antes de la puesta en marcha.',
+    a: 'Los planes de atención incluyen el chat de tu web y un número de WhatsApp. Puedes empezar por un canal y activar el otro cuando esté preparado. La conexión de WhatsApp está sujeta a los requisitos y políticas de Meta; no incluye campañas masivas ni llamadas de voz.',
   },
   {
     q: '¿Se integra con mi programa de gestión dental?',
-    a: 'Hoy conectamos Easy!Appointments, una agenda de código abierto que aprovisionamos y mantenemos nosotros para tu clínica. No integramos Clinic Cloud, Gesden, Dentasys ni similares: si ya usas uno, revisamos contigo si tiene sentido mantenerlo en paralelo. Dinos qué programa usas y te lo decimos con claridad antes de presupuestar nada.',
+    a: 'Conectamos el asistente a un calendario de citas que configuramos y mantenemos para tu clínica. No implica sincronización automática con tu programa de gestión dental. Si ya utilizas uno, revisamos contigo el flujo de trabajo y la compatibilidad antes de contratar, para evitar llevar agendas duplicadas sin un proceso claro.',
   },
   {
     q: '¿Responde fuera del horario de la clínica?',
@@ -55,11 +50,11 @@ const faqs = [
   },
   {
     q: '¿Cómo se calcula el precio?',
-    a: 'La propuesta desglosa la cuota mensual según módulos y, cuando corresponda, agendas; más una implementación de pago único con anticipo del 50 %. Incluye impuestos, consumo incluido y posibles costes externos.',
+    a: 'Puedes comparar la atención en web y WhatsApp con la opción que añade el calendario de citas. Cada plan publica su cuota de conversaciones al mes (1.500 o 2.500) y el excedente a 0,06 € por conversación. La mensualidad se factura a mes vencido, prorrateada por los días activos de cada agente: nada se cobra por anticipado. La puesta en marcha se paga una sola vez, separada de la mensualidad. Los precios de referencia no incluyen impuestos; la propuesta concreta el alcance, los profesionales incluidos y cualquier coste adicional. Las Condiciones del servicio lo detallan.',
   },
   {
     q: '¿Qué pago para empezar?',
-    a: 'El anticipo del 50 % de la implementación. Antes de contratar recibes el calendario de pagos completo, incluido el 50 % restante y el inicio de la mensualidad.',
+    a: 'Solicitar una propuesta y probar la demo no tiene coste. La puesta en marcha se paga 50 % al confirmar el pedido y 50 % a la aceptación de las pruebas, con 10 días hábiles para revisarlas; si cancelas antes de que empecemos la configuración, se reembolsa íntegra. La facturación de la mensualidad empieza en la fecha de activación acordada y se emite a mes vencido por los días activos; no se cobra por anticipado. No se realiza ningún cobro desde este formulario.',
   },
   {
     q: '¿Puedo probarlo antes de contratar?',
@@ -67,11 +62,19 @@ const faqs = [
   },
   {
     q: '¿Qué pasa con mis datos si dejo el servicio?',
-    a: 'Lo acordamos en el contrato antes de la puesta en marcha: exportación de tus contenidos y supresión de datos en los plazos pactados.',
+    a: 'Facilitamos la exportación de tus contenidos y suprimimos o devolvemos los datos en los 30 días siguientes a la baja, salvo obligación legal de conservación, según el contrato de encargo de tratamiento. La Política de privacidad describe los plazos de cada tipo de dato.',
   },
   {
     q: '¿Hay permanencia o puedo cambiar módulos?',
-    a: 'Las condiciones de duración, cambios y cancelación se detallan en tu propuesta antes de contratar. No tendrás que deducirlas de un precio anunciado.',
+    a: 'No hay permanencia: la suscripción es mensual y se renueva automáticamente, y se factura a mes vencido por los días activos de cada agente (del día 1 del mes al día de cancelación, si la hay). Puedes cancelarla cuando quieras desde el botón de cancelación del panel de la aplicación, desde el portal de cliente o escribiendo a soporte@citydent.app: la facturación se detiene en ese momento y conservas el acceso 7 días más sin coste ni factura; después solo se emite la liquidación final de lo ya consumido. Añadir el calendario o cambiar el alcance se acuerda en la propuesta. La solicitud de información no activa una suscripción.',
+  },
+  {
+    q: '¿Qué pasa si supero las conversaciones incluidas?',
+    a: 'El excedente se factura a 0,06 € por conversación (impuestos no incluidos) en la factura del periodo o en la liquidación final al cancelar, y avisamos por correo al llegar al 80 % y al 100 % de la cuota. Si prefieres un presupuesto cerrado, acordamos un tope mensual de excedentes en la propuesta. Una conversación es una sesión de mensajes en un canal; varios mensajes de la misma sesión cuentan como una.',
+  },
+  {
+    q: '¿Dónde leo las condiciones y las políticas legales?',
+    a: 'En el pie de página: Aviso legal, Política de privacidad, Política de cookies y Condiciones del servicio. Ahí publicamos precios de referencia, cuotas, pagos, cancelación, reembolsos y soporte. Si algo no encaja con tu caso, lo ajustamos en la propuesta antes de contratar.',
   },
 ];
 ---

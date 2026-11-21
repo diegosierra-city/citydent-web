@@ -18,8 +18,7 @@ const suggestions = [
 <section id="demo" class="band demo-section bg-paper text-ink" data-demo>
   <div class="shell grid gap-14 lg:grid-cols-12 lg:items-start lg:gap-16">
     <div class="lg:col-span-6">
-      <p class="kicker text-brand-deep" data-reveal="up">No nos creas. Pregúntaselo.</p>
-      <h2 class="heading-section mt-4 text-ink" data-reveal="mask">
+      <h2 class="heading-section text-ink" data-reveal="mask">
         Pruébalo como lo haría un paciente.
       </h2>
       <p class="prose-measure mt-6 text-mist" data-reveal="up">
@@ -63,15 +62,15 @@ const suggestions = [
           <p class="text-sm font-semibold text-ink">CityDent · Clínica de demostración</p>
           <span class="inline-flex items-center gap-1.5 rounded-full bg-brand-teal/12 px-2.5 py-1 text-xs font-semibold text-brand-deep">
             <span class="h-1.5 w-1.5 rounded-full bg-brand-teal" aria-hidden="true"></span>
-            En línea
+            Demo con IA
           </span>
         </div>
 
         <div class="mt-5 flex flex-col gap-3">
           <p class="bubble bubble-assistant max-w-[92%] self-start gradient-bubble text-ink">
             Hola, soy el asistente de IA de esta clínica de demostración. Puedo
-            ayudarte con información general y explicarte cómo pedir cita. ¿Qué
-            te gustaría probar?
+            ayudarte con información general, consultar horas disponibles y
+            preparar una reserva de prueba. ¿Qué te gustaría probar?
           </p>
         </div>
 
@@ -103,9 +102,9 @@ const suggestions = [
   <div class="shell mt-16 border-t border-ink/12 pt-10 lg:mt-20">
     <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
       <p class="prose-measure text-ink lg:col-span-7" data-reveal="up">
-        Esto es con información de ejemplo. Con la de tu clínica, CityDent
-        respondería así sobre tus horarios, tus servicios y tus citas, y
-        reservaría en tu agenda.
+        Así puedes explorar el asistente antes de decidir. Para tu clínica,
+        revisamos los contenidos, conectamos los canales y probamos el calendario
+        de citas si eliges incluirlo.
       </p>
       <div class="flex flex-col gap-3 sm:flex-row sm:items-center lg:col-span-5 lg:justify-end" data-reveal="up">
         <a
@@ -148,7 +147,7 @@ const suggestions = [
    * el widget no llegó a cargar.
    */
   const section = document.querySelector<HTMLElement>('[data-demo]');
-  const launcher = () => document.querySelector<HTMLButtonElement>('.cc-widget-launcher');
+  const launcher = () => document.querySelector<HTMLButtonElement>('.cc-widget-launcher:not([hidden])');
 
   const showFallback = (visible: boolean) => {
     section?.querySelector('[data-demo-fallback]')?.classList.toggle('hidden', !visible);

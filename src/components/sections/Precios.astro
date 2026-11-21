@@ -1,149 +1,156 @@
 ---
-/**
- * Escenas 10 y 11 (§3.10–3.11): precio transparente y puesta en marcha.
- *
- * PENDIENTE — Configurador de tarifas.
- * Las tarifas se cargarán desde un API y se presentarán según la ubicación
- * geográfica del visitante. Hasta que exista ese origen de datos no se publica
- * ningún importe, ni «desde X €», ni un configurador que fabrique cifras:
- * la sección explica la estructura del precio y deriva a «Solicitar propuesta».
- * Punto de integración previsto: sustituir el bloque `.price-structure` por el
- * configurador (pasos 1–3 de §3.10) leyendo tarifas de la API + geolocalización.
- */
-const priceParts = [
+const plans = [
   {
-    title: 'Cuota mensual',
-    body: 'Según los módulos contratados y las agendas incluidas.',
+    name: 'Atención',
+    description: 'Para responder las consultas habituales de tu clínica.',
+    monthly: 149,
+    setup: 390,
+    quota: '1.500 conversaciones al mes incluidas.',
+    features: [
+      'Chat integrado en una web y un número de WhatsApp.',
+      'Respuestas sobre horarios, ubicación, servicios y precios que facilite tu clínica.',
+      'Contenidos y tono adaptados a tu equipo.',
+      'Sin consulta de disponibilidad ni reserva de citas.',
+    ],
+    cta: 'Solicitar Atención',
+    calendar: false,
   },
   {
-    title: 'Implementación de pago único',
-    body: 'Revisión de tu información, configuración del asistente, conexión de canales y pruebas acordadas.',
-  },
-  {
-    title: 'Anticipo del 50 % de la implementación',
-    body: 'Para empezar. El 50 % restante se paga cuando activamos lo acordado.',
+    name: 'Atención + Citas',
+    description: 'Para responder consultas y reservar en el calendario de citas.',
+    monthly: 249,
+    setup: 690,
+    quota: '2.500 conversaciones al mes incluidas.',
+    features: [
+      'Todo lo incluido en Atención: web y WhatsApp.',
+      'Calendario de citas configurado para tu clínica.',
+      'Consulta de horas libres por servicio y profesional.',
+      'Reservas con confirmación del paciente; cambios y cancelaciones de las citas gestionadas por el asistente.',
+    ],
+    cta: 'Solicitar Atención + Citas',
+    calendar: true,
   },
 ];
 
 const steps = [
   {
     title: 'Escuchamos a tu clínica',
-    body: 'Revisamos qué preguntas recibís, cómo atendéis y qué canales necesitáis.',
+    body: 'Revisamos qué preguntas recibís, cómo atendéis y si necesitáis el calendario de citas.',
   },
   {
-    title: 'Cerramos alcance y presupuesto',
-    body: 'Módulos, necesidades de agenda, implementación y calendario de pagos, por escrito. El inicio requiere el 50 % de la implementación.',
+    title: 'Acordamos la propuesta',
+    body: 'Dejamos por escrito el alcance, los límites de uso, el precio y las condiciones de pago, renovación, cancelación y reembolso.',
   },
   {
-    title: 'Configuramos y probamos contigo',
-    body: 'Preparamos el contenido del asistente y repasamos juntos situaciones habituales y preguntas fuera de su alcance.',
+    title: 'Configuramos y probamos',
+    body: 'Preparamos los contenidos, conectamos los canales y comprobamos contigo las respuestas y las reservas, si las has contratado.',
   },
   {
-    title: 'Activamos lo probado',
-    body: 'Solo entra en producción lo que has visto responder. Te explicamos cómo pedir ajustes y qué incluye tu servicio.',
+    title: 'Activamos contigo',
+    body: 'Revisamos las pruebas acordadas y la fecha de inicio. Tu equipo conoce el funcionamiento, los límites y cómo solicitar ayuda.',
   },
 ];
 ---
 
 <section id="precios" class="band bg-ink/[0.03] text-ink">
-  <div class="shell grid gap-12 lg:grid-cols-12 lg:gap-16">
-    <div class="lg:col-span-6">
-      <h2 class="heading-section text-ink" data-reveal="mask">
-        Una cuota clara. Un inicio claro. Cero sorpresas.
+  <div class="shell">
+    <div class="max-w-3xl">
+      <h2 class="heading-section" data-reveal="mask">
+        Web y WhatsApp juntos.<br />Las citas, si las necesitas.
       </h2>
       <p class="prose-measure mt-6 text-mist" data-reveal="up">
-        Antes de hablar de precio, habla de coste: el de las consultas que hoy se
-        quedan sin respuesta. Cuando te enviemos la propuesta, haremos esa cuenta
-        juntos con el ticket medio de tu clínica. La cuota de CityDent se
-        compara mejor con lo que ya pierdes que con lo que gastas.
+        Dos opciones para una clínica, con puesta en marcha acompañada.
+        Estos precios son orientativos y no incluyen impuestos. Antes de contratar,
+        recibirás una propuesta con el alcance y el importe final.
       </p>
+    </div>
 
-      <!-- Reversión del riesgo: el hito protege al comprador -->
-      <div class="mt-10 rounded-[1.3rem] border border-ink/12 bg-paper p-6 md:p-7" data-reveal="up">
-        <p class="kicker text-brand-deep">Cómo se paga la implementación</p>
-        <div class="mt-5 flex overflow-hidden rounded-full border border-ink/12" aria-hidden="true">
-          <span class="split-start flex-1 py-3 text-center text-sm font-semibold text-white">50 % al iniciar</span>
-          <span class="split-end flex-1 py-3 text-center text-sm font-semibold text-ink">50 % al activar</span>
-        </div>
-        <p class="mt-5 text-base leading-relaxed text-ink">
-          No pagas todo por adelantado: la mitad al iniciar y la mitad cuando
-          activamos lo acordado. Si la puesta en marcha no llega con lo pactado,
-          no se cierra ese hito.
-        </p>
-      </div>
-
-      <!-- Mecanismo de la cuota: argumento de funcionamiento, no de importe -->
-      <div
-        class="mt-6 rounded-[1.3rem] border border-brand-teal/35 bg-brand-teal/[0.07] p-6 md:p-7"
-        data-reveal="up"
-      >
-        <p class="kicker text-brand-deep">Si no funciona, no cuenta</p>
-        <p class="mt-4 text-base leading-relaxed text-ink">
-          Si un módulo deja de funcionar, deja de contar. La cuota se calcula por
-          los días en que cada módulo está realmente operativo: si tu agenda se
-          cae, esos días no se facturan.
-        </p>
-      </div>
-
-      <p class="prose-measure mt-8 text-ink" data-reveal="up">
-        Antes de contratar recibirás el desglose completo: mensualidad,
-        implementación, calendario de pagos, impuestos y cualquier coste
-        adicional. Si algo no está en ese documento, no se cobra.
-      </p>
-
-      <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center" data-reveal="up">
-        <a
-          href="#contacto"
-          class="gradient-cta rounded-full px-7 py-3.5 text-center font-semibold text-white shadow-lg shadow-brand-blue/25 transition-transform hover:scale-[1.03]"
+    <div class="mt-12 grid gap-6 md:grid-cols-2 lg:gap-8">
+      {plans.map((plan) => (
+        <article
+          class:list={[
+            'flex flex-col rounded-[1.5rem] border p-6 sm:p-8 lg:p-10',
+            plan.calendar ? 'border-brand-teal/40 bg-paper' : 'border-ink/12 bg-paper',
+          ]}
+          data-reveal="up"
         >
-          Solicitar propuesta
-        </a>
-        <p class="text-sm leading-relaxed text-mist sm:max-w-xs">
-          Enviar tu configuración no activa el servicio ni genera ningún cobro.
+          <h3 class="font-display text-2xl font-semibold">{plan.name}</h3>
+          <p class="mt-3 max-w-md text-base leading-relaxed text-mist">{plan.description}</p>
+          <p class="mt-7 flex flex-wrap items-baseline gap-x-2">
+            <span class="font-display text-5xl font-semibold tracking-tight tabular-nums">{plan.monthly} €</span>
+            <span class="text-base text-mist">/ mes</span>
+          </p>
+          <p class="mt-3 text-base text-ink">
+            Puesta en marcha desde{' '}<strong class="font-semibold">{plan.setup} €</strong>
+          </p>
+          <p class="mt-1 text-sm text-mist">Pago único, separado de la mensualidad. Impuestos no incluidos.</p>
+          <p class="mt-4 text-base font-semibold text-brand-deep">{plan.quota}</p>
+
+          <ul class="my-8 space-y-4 border-t border-ink/12 pt-7">
+            {plan.features.map((feature) => (
+              <li class="flex items-start gap-3 text-base leading-relaxed">
+                <svg class="mt-1 h-5 w-5 shrink-0 text-brand-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m5 12 4 4L19 6" />
+                </svg>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+          <a
+            href="#contacto"
+            class:list={[
+              'mt-auto block rounded-full px-5 py-3.5 text-center font-semibold transition-colors',
+              plan.calendar
+                ? 'bg-brand-deep text-white hover:bg-ink'
+                : 'border border-ink/25 text-ink hover:bg-ink/5',
+            ]}
+          >
+            {plan.cta}
+          </a>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-10 grid gap-8 border-t border-ink/12 pt-8 md:grid-cols-2 lg:gap-16" data-reveal="up">
+      <div>
+        <h3 class="font-display text-xl font-semibold">Qué cubre la puesta en marcha</h3>
+        <p class="mt-3 text-base leading-relaxed text-mist">
+          Revisión de la información de tu clínica, configuración del asistente,
+          conexión de los canales y pruebas contigo. En Atención + Citas también
+          preparamos los servicios, profesionales y horarios del calendario acordado.
+          No incluye sincronización automática con tu programa de gestión dental.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-display text-xl font-semibold">Consumo y costes adicionales</h3>
+        <p class="mt-3 text-base leading-relaxed text-mist">
+          Cada plan incluye su cuota de conversaciones al mes (web y WhatsApp suman en un
+          único contador). El excedente se factura a 0,06 € por conversación en la factura del
+          periodo o en la liquidación final al cancelar, con aviso al
+          80 % y al 100 % de la cuota; no son planes de uso ilimitado. Los posibles cargos de
+          Meta o de otros proveedores se repercuten a coste y las integraciones a medida se
+          desglosan aparte. WhatsApp requiere una cuenta y un número aptos para su conexión.
+          Todo el detalle, en las <a href="/legal/condiciones" class="underline underline-offset-3 hover:text-brand-deep">Condiciones del servicio</a>.
         </p>
       </div>
     </div>
-
-    <div class="lg:col-span-6">
-      <div class="price-structure rounded-[1.5rem] border border-ink/12 bg-paper p-6 md:p-8" data-reveal="rise">
-        <p class="kicker text-brand-deep">Qué compone tu propuesta</p>
-
-        <dl class="mt-6">
-          {priceParts.map((part) => (
-            <div class="border-t border-ink/12 py-5 first:border-t-0 first:pt-0">
-              <dt class="font-display text-lg font-semibold text-ink md:text-xl">{part.title}</dt>
-              <dd class="mt-2 text-base leading-relaxed text-mist">{part.body}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <div class="mt-6 border-t border-ink/12 pt-5">
-          <p class="text-sm leading-relaxed text-mist">
-            Estamos preparando el configurador con las tarifas de tu zona.
-            Mientras tanto, tu propuesta se compone de una cuota mensual según
-            los módulos contratados y un coste único de implementación. Si
-            quieres conectar tu agenda, confirmamos el alcance caso por caso:
-            profesionales, servicios y horarios.
-          </p>
-          <p class="mt-4 font-display text-lg font-semibold text-ink">
-            Presupuesto personalizado, sin cifras inventadas.
-          </p>
-        </div>
-      </div>
-    </div>
+    <p class="mt-8 max-w-3xl text-sm leading-relaxed text-mist" data-reveal="up">
+      ¿Tienes varias clínicas o necesitas más números? Revisamos tu caso.
+      Probar la demo y solicitar una propuesta no activa una suscripción ni genera cobros.
+    </p>
   </div>
 </section>
 
 <section id="puesta-en-marcha" class="band bg-paper text-ink">
   <div class="shell">
     <h2 class="heading-section max-w-3xl" data-reveal="mask">
-      No activas un chat. Estrenas un miembro más del equipo.
+      De la primera prueba a tu clínica, con acompañamiento.
     </h2>
 
     <ol class="mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-8" data-reveal="list">
       {steps.map((step, index) => (
         <li data-reveal-item class="relative">
-          <p class="font-display text-[2.75rem] leading-none font-semibold text-brand-blue/25">
+          <p class="font-display text-[2.75rem] leading-none font-semibold text-brand-blue/25" aria-hidden="true">
             {String(index + 1).padStart(2, '0')}
           </p>
           <h3 class="mt-4 font-display text-xl font-semibold text-ink">{step.title}</h3>
@@ -153,18 +160,15 @@ const steps = [
     </ol>
 
     <p class="mt-14 max-w-3xl border-t border-ink/12 pt-8 text-lg leading-relaxed text-ink" data-reveal="up">
-      El plazo depende de tu configuración y tus conexiones. Lo concretamos en
-      tu propuesta, no en un titular.
+      Sin permanencia: la suscripción es mensual y se cancela cuando quieras. Se factura a mes
+      vencido: cada factura cubre del día 1 del mes al último día activo del agente, o al día
+      de cancelación si la hay, y nada se cobra por anticipado. Cancelar desde
+      el panel de la aplicación detiene la facturación al momento y conserva el acceso 7 días
+      más, sin facturarlos. La puesta en
+      marcha se paga 50 % al confirmar el pedido y 50 % a la aceptación de las pruebas, con
+      10 días hábiles para revisarlas. Las{' '}
+      <a href="/legal/condiciones" class="underline underline-offset-3 hover:text-brand-deep">Condiciones del servicio</a>{' '}
+      lo detallan; la propuesta las concreta para tu caso. No tienes que decidirlo para probar la demo.
     </p>
   </div>
 </section>
-
-<style>
-  .split-start {
-    background: linear-gradient(135deg, var(--color-brand-blue) 0%, var(--color-brand-teal) 100%);
-  }
-
-  .split-end {
-    background: rgb(12 38 65 / 0.06);
-  }
-</style>

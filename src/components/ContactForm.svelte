@@ -59,7 +59,6 @@
   let agendasCount = $state('');
   let software = $state('');
   let message = $state('');
-  let founders = $state(false);
   let honeypot = $state(''); // debe quedar vacío: lo rellenan los bots
 
   let status = $state(STATUS.IDLE);
@@ -127,7 +126,6 @@
           agendasCount: wantsAgendas ? agendasCount : '',
           software: wantsAgendas ? software : '',
           message,
-          founders,
         }),
       });
 
@@ -136,7 +134,6 @@
       if (res.ok && data.ok) {
         status = STATUS.SUCCESS;
         name = clinic = email = phone = channels = agendas = agendasCount = software = message = '';
-        founders = false;
       } else {
         status = STATUS.ERROR;
         formError =
@@ -201,6 +198,9 @@
         bind:value={honeypot}
       />
     </div>
+
+    <h3 class="font-display text-2xl font-semibold text-ink">Cuéntanos qué necesitas</h3>
+    <p class="mt-3 mb-7 text-sm leading-relaxed text-mist">Sin compromiso ni cobros. Los campos con * son obligatorios; el resto nos ayuda a preparar tu propuesta.</p>
 
     <div class="grid gap-5 sm:grid-cols-2">
       <div>
@@ -308,7 +308,7 @@
     </fieldset>
 
     <fieldset class="mt-7">
-      <legend class={labelClass}>¿Necesitas conectar agendas? <span class="font-normal text-mist">(opcional)</span></legend>
+      <legend class={labelClass}>¿Quieres añadir el calendario de citas? <span class="font-normal text-mist">(opcional)</span></legend>
       <div class="flex flex-wrap gap-2">
         {#each AGENDAS as option}
           <label class="{chipClass} {agendas === option.value ? chipOn : chipOff}">
@@ -318,15 +318,15 @@
         {/each}
       </div>
       <p class={hintClass}>
-        La agenda conectada está disponible. Lo que revisamos caso por caso es el
-        alcance: cuántos profesionales, qué servicios y qué horarios.
+        Configuramos un calendario para tu clínica. Si ya usas un programa de
+        gestión, revisamos cómo trabajar con ambos; no se sincronizan automáticamente.
       </p>
     </fieldset>
 
     {#if wantsAgendas}
       <div class="mt-5 grid gap-5 rounded-[1rem] bg-ink/[0.03] p-5 sm:grid-cols-2">
         <div>
-          <label for="c-agendas-count" class={labelClass}>Número aproximado de agendas</label>
+          <label for="c-agendas-count" class={labelClass}>Número de profesionales con agenda</label>
           <input
             type="number"
             id="c-agendas-count"
@@ -379,16 +379,6 @@
       </div>
     </div>
 
-    <label class="mt-6 flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-ink">
-      <input
-        type="checkbox"
-        name="founders"
-        class="mt-0.5 h-5 w-5 flex-none accent-brand-blue"
-        bind:checked={founders}
-      />
-      Quiero información del Programa Clínicas Fundadoras.
-    </label>
-
     <div
       id="form-feedback"
       aria-live="polite"
@@ -420,9 +410,10 @@
     </button>
 
     <p class="mt-4 text-center text-xs leading-relaxed text-mist">
-      Utilizaremos tus datos para responder a esta solicitud. No incluyas
-      información de pacientes.
-      <!-- Enlazar la Política de privacidad cuando exista la página legal. -->
+      Utilizaremos tus datos para responder a esta solicitud, según la
+      <a href="/legal/privacidad" class="underline underline-offset-2 hover:text-brand-deep">Política de privacidad</a>.
+      No incluyas información de pacientes. Dudas:
+      <a href="mailto:soporte@citydent.app" class="underline underline-offset-2 hover:text-brand-deep">soporte@citydent.app</a>.
     </p>
   </form>
 {/if}
