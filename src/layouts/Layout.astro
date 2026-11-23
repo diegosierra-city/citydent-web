@@ -28,11 +28,15 @@ const {
   description = 'Asistente de IA para clínicas dentales: consultas administrativas en web y WhatsApp, con calendario de citas opcional. Prueba la demo y compara los planes.',
   ogTitle = 'Lo más importante son tus pacientes. Conoce CityDent.',
   ogDescription = 'Un asistente de IA para apoyar la atención de tu clínica dental. Pruébalo en una demostración interactiva.',
-  ogImage = '/img/hero.jpg',
+  /* Póster estático del hero (1920×960). No usar hero.jpg: se retiró porque
+     intervenía en el salto de la animación; este WebP es la fuente vigente. */
+  ogImage = '/img/hero.webp',
   noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+/* og:image / twitter:image exigen URL absoluta: los crawlers no resuelven relativas */
+const ogImageURL = new URL(ogImage, Astro.site);
 
 /* Nav principal (propuesta §3): cada href debe coincidir con un id real de la página */
 const navLinks = [
@@ -73,7 +77,10 @@ const footerLinks = [
     <meta property="og:type" content="website" />
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={ogDescription} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1920" />
+    <meta property="og:image:height" content="960" />
+    <meta property="og:image:alt" content="Profesional de una clínica dental sonríe con protección facial y prepara sus instrumentos" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content="CityDent" />
     <meta property="og:locale" content="es_ES" />
@@ -82,7 +89,7 @@ const footerLinks = [
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={ogDescription} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={ogImageURL} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Privacy-friendly analytics by Plausible -->

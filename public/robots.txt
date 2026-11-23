@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://citydent.app/sitemap-index.xml
