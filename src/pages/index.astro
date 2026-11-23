@@ -60,7 +60,7 @@ const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
     </div>
 
     <section class="opening-hero relative z-10 flex min-h-svh items-end md:items-center" aria-label="CityDent, asistencia para tu clínica">
-      <div class="container relative mx-auto w-full min-w-0 px-5 pt-28 pb-14 md:px-6 md:pt-32 md:pb-24">
+      <div class="opening-copy container relative mx-auto w-full min-w-0 px-5 pt-28 pb-14 md:px-6 md:pt-32 md:pb-24">
         <!-- Copy directo sobre la foto: scrim localizado + sombra tipográfica -->
         <div class="max-w-md lg:max-w-xl" data-hero-copy>
           <!-- Etiqueta: deja clara la categoría del producto -->
@@ -147,7 +147,7 @@ const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
       />
       <div data-seq-fallback class="scrim-side absolute inset-0" aria-hidden="true"></div>
 
-      <div class="opening-patient-copy container relative z-10 mx-auto flex min-h-svh items-center px-5 py-28 md:px-6">
+      <div class="opening-copy opening-patient-copy container relative z-10 mx-auto flex min-h-svh items-center px-5 py-28 md:px-6">
         <div class="max-w-md lg:max-w-xl" data-seq-copy>
           <h2
             class="text-shadow-display font-display text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-[3.4rem]"
@@ -182,7 +182,7 @@ const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
     </div>
 
     <section id="citydent-responde" class="care-beat care-first relative" aria-labelledby="responde-heading">
-      <div class="care-copy container relative z-10 mx-auto flex flex-col justify-end px-5 md:px-6">
+      <div class="opening-copy care-copy container relative z-10 mx-auto flex flex-col justify-end px-5 md:px-6">
         <div class="care-message">
           <h2 id="responde-heading" class="text-shadow-display font-display text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-[3.4rem]">
             Mientras tú cuidas, <span class="text-brand-teal">CityDent responde.</span>
@@ -208,7 +208,7 @@ const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
         width="1920" height="960" loading="lazy" decoding="async"
       />
       <div data-seq-fallback class="care-scrim absolute inset-0" aria-hidden="true"></div>
-      <div class="care-copy container relative z-10 mx-auto flex flex-col justify-end px-5 md:px-6">
+      <div class="opening-copy care-copy container relative z-10 mx-auto flex flex-col justify-end px-5 md:px-6">
         <div class="care-message">
           <h2 id="equipo-heading" class="text-shadow-display font-display text-4xl leading-[1.05] font-semibold text-balance text-white sm:text-5xl lg:text-[3.4rem]">
             Un apoyo para tu equipo. Más atención para tus pacientes.
@@ -255,7 +255,7 @@ const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
   [data-seq-active] .opening-patient-copy { position: sticky; top: 0; }
   [data-seq-active] [data-seq-fallback] { display: none; }
 
-  /* Dos pausas de lectura sobre el mismo recorrido de cámara. */
+  /* Pausas de lectura sobre el mismo recorrido de cámara. */
   .care-story { display: grid; grid-area: 3 / 1; }
   .care-media { position: relative; grid-area: 1 / 1; overflow: hidden; }
   .care-first { grid-area: 1 / 1; }
@@ -268,7 +268,7 @@ const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
   }
   [data-seq-active] .care-story { display: block; }
   [data-seq-active] .care-first { min-height: 200svh; }
-  [data-seq-active] .care-team { min-height: 100svh; }
+  [data-seq-active] .care-team { min-height: 200svh; }
   [data-seq-active] .care-copy { position: sticky; top: 0; }
   .opening-scrim { opacity: calc(1 - var(--care-tone, 0)); }
   .continuity-scrim {
@@ -296,6 +296,14 @@ const frameAt = (f: number) => frameSrc(Math.round(f * (seqCount - 1)));
     /* En horizontal el cover ya abarca ambas figuras: sin paneo. */
     .sequence-visual { object-position: 50% 40%; }
     img[data-seq-fallback] { object-position: 50% 40%; }
+    .opening-hero { align-items: flex-start; }
+    .opening-patient-copy { align-items: flex-start; }
+    .care-copy { justify-content: flex-start; }
+    .opening-copy { padding-top: clamp(9rem, 26svh, 14rem); }
+    /* La etiqueta acompaña al titular sin desplazar su anclaje común. */
+    [data-hero-copy] { position: relative; }
+    [data-hero-copy] > p:first-child { position: absolute; left: 0; bottom: calc(100% + 1.25rem); }
+    [data-hero-copy] h1 { margin-top: 0; }
   }
 </style>
 

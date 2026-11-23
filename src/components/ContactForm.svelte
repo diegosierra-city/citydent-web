@@ -37,6 +37,11 @@
       .string()
       .min(2, 'Indica el nombre de tu clínica.')
       .max(120, 'El nombre de la clínica es demasiado largo.'),
+    country: z
+      .string()
+      .trim()
+      .min(2, 'Indica el país de tu clínica.')
+      .max(80, 'El país es demasiado largo.'),
     email: z
       .string()
       .min(1, 'El correo profesional es obligatorio.')
@@ -54,6 +59,7 @@
 
   let name = $state('');
   let clinic = $state('');
+  let country = $state('');
   let email = $state('');
   let phone = $state('');
   let channels = $state('');
@@ -108,7 +114,7 @@
   const chipOff = 'border-ink/20 text-ink hover:border-brand-blue/60';
 
   function validate() {
-    const parsed = contactSchema.safeParse({ name, clinic, email, phone, message });
+    const parsed = contactSchema.safeParse({ name, clinic, country, email, phone, message });
     if (parsed.success) {
       fieldErrors = {};
       formError = '';
@@ -145,6 +151,7 @@
         body: JSON.stringify({
           name,
           clinic,
+          country: country.trim(),
           email,
           phone,
           channels,
@@ -159,7 +166,7 @@
       const data = await res.json();
 
       if (res.ok && data.ok) {
-        name = clinic = email = phone = channels = agendas = agendasCount = software = message = '';
+        name = clinic = country = email = phone = channels = agendas = agendasCount = software = message = '';
         founders = false;
         await showSuccess();
       } else {
@@ -274,6 +281,28 @@
         />
         {#if fieldErrors.clinic}
           <p id="err-clinic" class="mt-2 text-sm text-red-700">{fieldErrors.clinic}</p>
+        {/if}
+      </div>
+
+      <div class="max-w-sm sm:col-span-2">
+        <label for="c-country" class={labelClass}>
+          País de la clínica <span class="text-brand-deep">*</span>
+        </label>
+        <input
+          type="text"
+          id="c-country"
+          name="country"
+          required
+          maxlength="80"
+          autocomplete="country-name"
+          placeholder="España"
+          aria-invalid={Boolean(fieldErrors.country)}
+          aria-describedby={fieldErrors.country ? 'err-country' : undefined}
+          class="{fieldClass} {fieldErrors.country ? fieldBad : fieldOk}"
+          bind:value={country}
+        />
+        {#if fieldErrors.country}
+          <p id="err-country" class="mt-2 text-sm text-red-700">{fieldErrors.country}</p>
         {/if}
       </div>
 

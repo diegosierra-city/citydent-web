@@ -44,6 +44,7 @@ const navLinks = [
   { href: '#demo', label: 'Pruébalo' },
   { href: '#precios', label: 'Precios' },
   { href: '#preguntas', label: 'Preguntas frecuentes' },
+  { href: '#contacto', label: 'Contacto' },
 ];
 
 /* Pie (propuesta §8): sólo enlaces que resuelven a contenido real */
@@ -112,18 +113,18 @@ const footerLinks = [
   <body class="flex min-h-screen flex-col">
     <!-- Header fijo (propuesta §3) -->
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur-md">
-      <nav class="container mx-auto flex items-center justify-between px-5 py-3.5 md:px-6" aria-label="Principal">
-        <a href="#inicio" class="flex items-center gap-2.5" aria-label="CityDent — ir al inicio">
+      <nav class="container mx-auto flex items-center justify-between gap-4 px-5 py-3.5 md:px-6" aria-label="Principal">
+        <a href="#inicio" class="flex shrink-0 items-center gap-2.5" aria-label="CityDent — ir al inicio">
           <img src="/favicon.svg" alt="" aria-hidden="true" width="36" height="36" class="h-9 w-9" />
           <span class="font-display text-2xl font-semibold tracking-tight text-white">
             City<span class="gradient-text">Dent</span>
           </span>
         </a>
 
-        <ul class="hidden items-center gap-7 text-sm font-medium md:flex">
+        <ul class="hidden shrink-0 items-center gap-5 text-sm font-medium lg:flex xl:gap-7">
           {navLinks.map((link) => (
             <li>
-              <a href={link.href} class="text-white/85 transition-colors hover:text-brand-teal">
+              <a href={link.href} class="whitespace-nowrap text-white/85 transition-colors hover:text-brand-teal">
                 {link.label}
               </a>
             </li>
@@ -131,7 +132,7 @@ const footerLinks = [
           <li>
             <a
               href="#demo"
-              class="gradient-cta rounded-full px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.03]"
+              class="gradient-cta whitespace-nowrap rounded-full px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.03]"
             >
               Probar la demo
             </a>
@@ -140,7 +141,7 @@ const footerLinks = [
 
         <button
           type="button"
-          class="text-white md:hidden"
+          class="text-white lg:hidden"
           aria-label="Abrir menú"
           aria-expanded="false"
           aria-controls="mobile-nav"
@@ -155,7 +156,7 @@ const footerLinks = [
       <!-- Menú móvil -->
       <ul
         id="mobile-nav"
-        class="hidden flex-col gap-1 border-t border-white/10 bg-ink px-5 py-4 text-sm font-medium md:hidden"
+        class="hidden flex-col gap-1 border-t border-white/10 bg-ink px-5 py-4 text-sm font-medium lg:hidden"
         data-mobile-nav
       >
         {navLinks.map((link) => (
