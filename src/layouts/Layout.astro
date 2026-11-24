@@ -38,6 +38,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 /* og:image / twitter:image exigen URL absoluta: los crawlers no resuelven relativas */
 const ogImageURL = new URL(ogImage, Astro.site);
 
+const appUrl = 'https://app.citydent.app';
+
 /* Nav principal (propuesta §3): cada href debe coincidir con un id real de la página */
 const navLinks = [
   { href: '#beneficios', label: 'Cómo te ayuda' },
@@ -49,6 +51,7 @@ const navLinks = [
 
 /* Pie (propuesta §8): sólo enlaces que resuelven a contenido real */
 const footerLinks = [
+  { href: `${appUrl}/login`, label: 'Acceso a la aplicación' },
   { href: '#beneficios', label: 'Cómo te ayuda' },
   { href: '#demo', label: 'Probar la demo' },
   { href: '#precios', label: 'Precios' },
@@ -131,6 +134,14 @@ const footerLinks = [
           ))}
           <li>
             <a
+              href={`${appUrl}/login`}
+              class="whitespace-nowrap text-white/85 transition-colors hover:text-brand-teal"
+            >
+              Acceso clientes
+            </a>
+          </li>
+          <li>
+            <a
               href="#demo"
               class="gradient-cta whitespace-nowrap rounded-full px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.03]"
             >
@@ -166,6 +177,11 @@ const footerLinks = [
             </a>
           </li>
         ))}
+        <li>
+          <a href={`${appUrl}/login`} class="block rounded-lg px-3 py-2.5 text-white/90 hover:bg-white/10">
+            Acceso a la aplicación
+          </a>
+        </li>
         <li class="mt-2 px-3">
           <a href="#demo" class="gradient-cta block rounded-full px-5 py-3 text-center font-semibold text-white">
             Probar la demo

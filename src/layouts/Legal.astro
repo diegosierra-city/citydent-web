@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const appUrl = 'https://app.citydent.app';
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 /* Imagen social compartida con el layout principal (póster del hero, 1920×960) */
 const ogImageURL = new URL('/img/hero.webp', Astro.site);
@@ -65,9 +66,14 @@ const legalLinks = [
             City<span class="gradient-text">Dent</span>
           </span>
         </a>
-        <a href="/" class="text-sm font-medium text-white/85 transition-colors hover:text-brand-teal">
-          Volver a la web
-        </a>
+        <div class="flex items-center gap-5">
+          <a href={`${appUrl}/login`} class="text-sm font-medium text-white/85 transition-colors hover:text-brand-teal">
+            Acceso a la aplicación
+          </a>
+          <a href="/" class="text-sm font-medium text-white/85 transition-colors hover:text-brand-teal">
+            Volver a la web
+          </a>
+        </div>
       </div>
     </header>
 
