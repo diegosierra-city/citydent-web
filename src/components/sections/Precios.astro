@@ -5,7 +5,6 @@ const plans = [
     description: 'Para responder las consultas habituales de tu clínica.',
     monthly: 149,
     setup: 390,
-    quota: '1.500 conversaciones al mes incluidas.',
     features: [
       'Chat integrado en una web y un número de WhatsApp.',
       'Respuestas sobre horarios, ubicación, servicios y precios que facilite tu clínica.',
@@ -20,7 +19,6 @@ const plans = [
     description: 'Para responder consultas y reservar en el calendario de citas.',
     monthly: 249,
     setup: 690,
-    quota: '2.500 conversaciones al mes incluidas.',
     features: [
       'Todo lo incluido en Atención: web y WhatsApp.',
       'Calendario de citas configurado para tu clínica.',
@@ -60,6 +58,7 @@ const steps = [
       </h2>
       <p class="prose-measure mt-6 text-mist" data-reveal="up">
         Dos opciones para una clínica, con puesta en marcha acompañada.
+        La mensualidad se factura por anticipado y sin permanencia.
         Estos precios son orientativos y no incluyen impuestos. Antes de contratar,
         recibirás una propuesta con el alcance y el importe final.
       </p>
@@ -84,7 +83,7 @@ const steps = [
             Puesta en marcha desde{' '}<strong class="font-semibold">{plan.setup} €</strong>
           </p>
           <p class="mt-1 text-sm text-mist">Pago único, separado de la mensualidad. Impuestos no incluidos.</p>
-          <p class="mt-4 text-base font-semibold text-brand-deep">{plan.quota}</p>
+          <p class="mt-4 text-base font-semibold text-brand-deep">Alcance y límites de uso concretados en la propuesta.</p>
 
           <ul class="my-8 space-y-4 border-t border-ink/12 pt-7">
             {plan.features.map((feature) => (
@@ -124,13 +123,12 @@ const steps = [
       <div>
         <h3 class="font-display text-xl font-semibold">Consumo y costes adicionales</h3>
         <p class="mt-3 text-base leading-relaxed text-mist">
-          Cada plan incluye su cuota de conversaciones al mes (web y WhatsApp suman en un
-          único contador). El excedente se factura a 0,06 € por conversación en la factura del
-          periodo o en la liquidación final al cancelar, con aviso al
-          80 % y al 100 % de la cuota; no son planes de uso ilimitado. Los posibles cargos de
-          Meta o de otros proveedores se repercuten a coste y las integraciones a medida se
-          desglosan aparte. WhatsApp requiere una cuenta y un número aptos para su conexión.
-          Todo el detalle, en las <a href="/legal/condiciones" class="underline underline-offset-3 hover:text-brand-deep">Condiciones del servicio</a>.
+          Los límites de uso y cualquier coste adicional se concretan en la propuesta.
+          No hay cargos automáticos por excedente ni se cuentan conversaciones para
+          facturarlas por separado. Los posibles cargos de Meta o de otros proveedores se
+          repercuten a coste y las integraciones a medida se desglosan aparte. WhatsApp
+          requiere una cuenta y un número aptos para su conexión. Todo el detalle, en las{' '}
+          <a href="/legal/condiciones" class="underline underline-offset-3 hover:text-brand-deep">Condiciones del servicio</a>.
         </p>
       </div>
     </div>
@@ -160,13 +158,12 @@ const steps = [
     </ol>
 
     <p class="mt-14 max-w-3xl border-t border-ink/12 pt-8 text-lg leading-relaxed text-ink" data-reveal="up">
-      Sin permanencia: la suscripción es mensual y se cancela cuando quieras. Se factura a mes
-      vencido: cada factura cubre del día 1 del mes al último día activo del agente, o al día
-      de cancelación si la hay, y nada se cobra por anticipado. Cancelar desde
-      el panel de la aplicación detiene la facturación al momento y conserva el acceso 7 días
-      más, sin facturarlos. La puesta en
-      marcha se paga 50 % al confirmar el pedido y 50 % a la aceptación de las pruebas, con
-      10 días hábiles para revisarlas. Las{' '}
+      Sin permanencia: la suscripción es mensual y se cancela cuando quieras. Se factura por
+      anticipado: cada factura cubre la mensualidad completa del mes, y un alta a mitad de mes
+      prorratea sólo ese primer mes. La cancelación se hace directamente desde el panel: evita la
+      factura siguiente y mantiene el asistente activo hasta el final del mes ya pagado. La
+      puesta en marcha se paga 50 % al confirmar el pedido y 50 % a la aceptación de las pruebas,
+      con 10 días hábiles para revisarlas. Las{' '}
       <a href="/legal/condiciones" class="underline underline-offset-3 hover:text-brand-deep">Condiciones del servicio</a>{' '}
       lo detallan; la propuesta las concreta para tu caso. No tienes que decidirlo para probar la demo.
     </p>

@@ -66,7 +66,6 @@
   let agendas = $state('');
   let agendasCount = $state('');
   let software = $state('');
-  let founders = $state(false);
   let message = $state('');
   let honeypot = $state(''); // debe quedar vacío: lo rellenan los bots
 
@@ -158,7 +157,6 @@
           agendas,
           agendasCount: wantsAgendas ? agendasCount : '',
           software: wantsAgendas ? software : '',
-          founders,
           message,
         }),
       });
@@ -167,7 +165,6 @@
 
       if (res.ok && data.ok) {
         name = clinic = country = email = phone = channels = agendas = agendasCount = software = message = '';
-        founders = false;
         await showSuccess();
       } else {
         status = STATUS.ERROR;
@@ -439,21 +436,6 @@
         <span class="shrink-0 text-xs text-mist tabular-nums">{message.length} / 2000</span>
       </div>
     </div>
-
-    <label
-      class="mt-7 flex cursor-pointer items-start gap-3 rounded-[1rem] border border-ink/12 bg-ink/[0.03] p-4 transition-colors duration-150 has-[:checked]:border-brand-blue/50 has-[:checked]:bg-brand-blue/[0.06] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand-teal has-[:focus-visible]:ring-offset-2"
-    >
-      <input
-        type="checkbox"
-        name="founders"
-        class="mt-0.5 h-4 w-4 shrink-0 accent-brand-blue"
-        bind:checked={founders}
-      />
-      <span class="text-sm leading-relaxed text-ink">
-        Quiero información del <strong class="font-semibold">Programa Clínicas Fundadoras</strong>:
-        plaza prioritaria en la próxima incorporación y condiciones de fundador durante el primer periodo.
-      </span>
-    </label>
 
     <div
       id="form-feedback"
