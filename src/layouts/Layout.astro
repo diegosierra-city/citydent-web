@@ -294,11 +294,11 @@ const footerLinks = [
       initScroll();
 
       /* Navega a un anchor sólo si la sección existe (evita errores en anclas pendientes) */
-      const goAnchor = (href: string | null): boolean => {
+      const goAnchor = (href: string | null, url?: string): boolean => {
         if (!href || href === '#' || href === '/') return false;
         if (!document.querySelector(href)) return false;
         scrollToTarget(href);
-        history.replaceState(null, '', href);
+        history.replaceState(null, '', url ?? href);
         return true;
       };
 
@@ -332,10 +332,19 @@ const footerLinks = [
       /* ---- Anchors globales vía Lenis ---- */
       document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
         link.addEventListener('click', (event) => {
-          const href = link.getAttribute('href');
-          if (!document.querySelector(href ?? '')) return;
+          const raw = link.getAttribute('href');
+          if (!raw) return;
+          // Enlaces tipo #contacto?plan=atencion: el ancla es lo previo al '?'.
+          const [target, query] = raw.split('?');
+          if (!document.querySelector(target ?? '')) return;
           event.preventDefault();
-          goAnchor(href);
+          goAnchor(target ?? '', raw);
+          if (query) {
+            const plan = new URLSearchParams(query).get('plan');
+            if (plan) {
+              window.dispatchEvent(new CustomEvent('citydent:plan', { detail: plan }));
+            }
+          }
         });
       });
     </script>

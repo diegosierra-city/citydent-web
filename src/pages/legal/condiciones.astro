@@ -4,7 +4,7 @@ import Legal from '../../layouts/Legal.astro';
 
 <Legal
   title="Condiciones del servicio | CityDent"
-  description="Condiciones de contratación y uso de CityDent: planes, precios, límites de uso, puesta en marcha, pagos, renovación, cancelación, reembolsos, soporte y límites del asistente."
+  description="Condiciones de contratación y uso de CityDent: planes, precios, volúmenes de uso, puesta en marcha, pagos, renovación, cancelación, reembolsos, soporte y límites del asistente."
 >
   <div class="legal-prose">
     <h1 class="heading-section">Condiciones del servicio</h1>
@@ -21,7 +21,7 @@ import Legal from '../../layouts/Legal.astro';
     </p>
     <p>
       La propuesta escrita que acepte la clínica concreta el alcance, los canales, los
-      profesionales incluidos, los límites de uso y el precio. No puede reducir derechos
+      profesionales incluidos, los volúmenes incluidos y el precio. No puede reducir derechos
       imperativos del cliente. Si el pago se procesa mediante un merchant of record, sus
       condiciones y las condiciones del comprador prevalecen sobre las cláusulas
       contradictorias de este contrato.
@@ -43,14 +43,14 @@ import Legal from '../../layouts/Legal.astro';
       programas de gestión dental.
     </p>
 
-    <h2>2. Planes, precios y límites de uso</h2>
+    <h2>2. Planes, precios y volúmenes de uso</h2>
     <table>
       <thead>
         <tr>
           <th scope="col">Plan</th>
           <th scope="col">Mensualidad</th>
           <th scope="col">Puesta en marcha (pago único)</th>
-          <th scope="col">Límites de uso</th>
+          <th scope="col">Volumen incluido</th>
         </tr>
       </thead>
       <tbody>
@@ -58,23 +58,23 @@ import Legal from '../../layouts/Legal.astro';
           <td>Atención (web + WhatsApp)</td>
           <td>149 €</td>
           <td>desde 390 €</td>
-          <td>Según propuesta</td>
+          <td>500 conversaciones/mes · 1 clínica</td>
         </tr>
         <tr>
           <td>Atención + Citas</td>
           <td>249 €</td>
           <td>desde 690 €</td>
-          <td>Según propuesta</td>
+          <td>1.000 conversaciones y 300 operaciones de cita/mes · 1 agenda conectada</td>
         </tr>
       </tbody>
     </table>
     <p>
       Los importes publicados <strong>no incluyen impuestos</strong>. El tratamiento fiscal
-      depende del comprador, del país y de la forma de pago. Si Creem procesa la venta como
-      merchant of record, Creem determinará y repercutirá los impuestos de esa transacción y
-      emitirá el recibo al cliente; CityDent no emitirá un recibo adicional ni volverá a
-      cobrar ese mismo importe. En los pagos directos se aplicará la normativa fiscal que
-      corresponda a cada operación. La propuesta confirma el importe final y el tratamiento
+      depende del comprador, del país y de la forma de pago. Si el pago se procesa mediante un
+      merchant of record, ese proveedor determinará y repercutirá los impuestos de la
+      transacción y emitirá el recibo al cliente; CityDent no emitirá un recibo adicional ni
+      volverá a cobrar ese mismo importe. En los pagos directos se aplicará la normativa fiscal
+      que corresponda a cada operación. La propuesta confirma el importe final y el tratamiento
       aplicable.
     </p>
     <p>
@@ -84,11 +84,39 @@ import Legal from '../../layouts/Legal.astro';
       es el mes natural: cada factura cubre el mes completo. Si la baja está programada, la
       factura del mes en curso no se reduce; simplemente no se generan facturas posteriores.
     </p>
-    <h3>2.1. Límites de uso</h3>
+    <h3>2.1. Volúmenes incluidos</h3>
     <p>
-      El alcance y los límites de uso se concretan en la propuesta. No hay cuotas de
-      conversaciones ni cargos automáticos por excedente. Cualquier ampliación de
-      canales, profesionales o alcance se acuerda por escrito antes de aplicarse.
+      Cada plan incluye unos volúmenes mensuales, válidos para una clínica, su web y un
+      número de WhatsApp:
+    </p>
+    <ul>
+      <li>
+        <strong>Atención:</strong> 500 conversaciones al mes.
+      </li>
+      <li>
+        <strong>Atención + Citas:</strong> 1.000 conversaciones y 300 operaciones de cita al mes,
+        con una agenda conectada.
+      </li>
+    </ul>
+    <p>
+      Los usuarios del panel y las actualizaciones de contenido necesarias para mantener
+      la información de la clínica al día están incluidos dentro del alcance acordado. Los
+      desarrollos y las integraciones adicionales se presupuestan aparte.
+    </p>
+    <p>
+      Una <strong>conversación</strong> es cada sesión de chat con al menos un mensaje del
+      paciente. En WhatsApp, una sesión nueva empieza tras 24 horas sin mensajes. Una <strong>operación de cita</strong> es una reserva, cambio o cancelación ejecutada con
+      éxito por el asistente; cada operación se cuenta una vez. No cuentan las propuestas
+      abandonadas, las operaciones fallidas, las ausencias ni las citas creadas desde el
+      panel.
+    </p>
+    <p>
+      La propuesta puede ajustar estos volúmenes para cada clínica, junto con cualquier
+      ampliación de canales, profesionales o alcance, que se acuerda por escrito antes de
+      aplicarse. Si la clínica supera el volumen incluido durante dos meses consecutivos, le
+      proponemos ampliar el plan o acordar una solución a medida. No hay cargos automáticos
+      por excedente y el servicio no se interrumpe por este motivo, salvo uso abusivo, riesgo
+      de seguridad o impago.
     </p>
     <h3>2.2. Costes de terceros</h3>
     <p>
@@ -100,8 +128,8 @@ import Legal from '../../layouts/Legal.astro';
     <h3>2.3. Profesionales y clínicas</h3>
     <p>
       Los planes incluyen los profesionales y servicios que se acuerden en la propuesta para
-      una clínica y un número de WhatsApp. Varias clínicas o números adicionales se
-      presupuestan por caso.
+      una clínica, un número de WhatsApp y, en Atención + Citas, una agenda conectada. Varias
+      clínicas, números o agendas adicionales se presupuestan por caso.
     </p>
 
     <h2>3. Puesta en marcha</h2>
@@ -110,6 +138,14 @@ import Legal from '../../layouts/Legal.astro';
       de la información de la clínica, la configuración del asistente, la conexión de los
       canales contratados y las pruebas de aceptación con la clínica. En Atención + Citas
       incluye preparar servicios, profesionales y horarios del calendario acordado.
+    </p>
+    <p>
+      El proceso de contratación es: la clínica solicita la propuesta desde la web, recibe
+      por correo el enlace a estas condiciones, las revisa y las acepta (quedando registrada
+      la versión y la fecha de aceptación), paga el primer 50 % de la puesta en marcha y nos
+      facilita la información de configuración. Preparamos el asistente, la clínica acepta
+      las pruebas y paga el 50 % restante, y el servicio se activa con la primera mensualidad
+      facturada por anticipado.
     </p>
     <h3>3.1. Forma de pago</h3>
     <p>
@@ -173,11 +209,12 @@ import Legal from '../../layouts/Legal.astro';
     <h2>5. Pagos, impuestos y cambios de precio</h2>
     <p>
       Los pagos se realizan por los medios indicados en la propuesta y en la factura. Wompi
-      puede utilizarse para pagos de facturas de clientes de Colombia. Creem no procesa
-      actualmente compras de CityDent; si se incorpora como merchant of record, se informará
-      antes del pago, Creem emitirá el recibo y gestionará los impuestos de esa transacción,
-      y sus condiciones y las del comprador prevalecerán sobre las cláusulas contradictorias
-      de este contrato. Nuestras obligaciones de servicio y privacidad permanecen intactas.
+      puede utilizarse para pagos de facturas de clientes de Colombia. Si el pago de una
+      compra se procesa mediante un merchant of record, se informará antes del pago: ese
+      proveedor cobra por adelantado el importe correspondiente, emite el recibo y gestiona
+      los impuestos de esa transacción, y sus condiciones y las del comprador prevalecerán
+      sobre las cláusulas contradictorias de este contrato. Nuestras obligaciones de servicio
+      y privacidad permanecen intactas.
     </p>
     <p>
       Si cambiamos los precios de renovación, avisaremos por correo con al menos 30 días de

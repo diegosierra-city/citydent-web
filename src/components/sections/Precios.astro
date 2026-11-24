@@ -5,6 +5,8 @@ const plans = [
     description: 'Para responder las consultas habituales de tu clínica.',
     monthly: 149,
     setup: 390,
+    limits: 'Incluye 500 conversaciones al mes',
+    limitsNote: 'Una conversación es cada sesión de chat con al menos un mensaje del paciente; en WhatsApp, una sesión nueva empieza tras 24 horas sin mensajes. Para una clínica, una web y un número de WhatsApp.',
     features: [
       'Chat integrado en una web y un número de WhatsApp.',
       'Respuestas sobre horarios, ubicación, servicios y precios que facilite tu clínica.',
@@ -13,12 +15,15 @@ const plans = [
     ],
     cta: 'Solicitar Atención',
     calendar: false,
+    planKey: 'atencion',
   },
   {
     name: 'Atención + Citas',
     description: 'Para responder consultas y reservar en el calendario de citas.',
     monthly: 249,
     setup: 690,
+    limits: 'Incluye 1.000 conversaciones y 300 operaciones de cita al mes',
+    limitsNote: 'Una operación de cita es una reserva, cambio o cancelación ejecutada con éxito; cada operación cuenta una vez. Para una clínica, una web, un WhatsApp y una agenda conectada.',
     features: [
       'Todo lo incluido en Atención: web y WhatsApp.',
       'Calendario de citas configurado para tu clínica.',
@@ -27,6 +32,7 @@ const plans = [
     ],
     cta: 'Solicitar Atención + Citas',
     calendar: true,
+    planKey: 'citas',
   },
 ];
 
@@ -37,7 +43,7 @@ const steps = [
   },
   {
     title: 'Acordamos la propuesta',
-    body: 'Dejamos por escrito el alcance, los límites de uso, el precio y las condiciones de pago, renovación, cancelación y reembolso.',
+    body: 'Dejamos por escrito el alcance, los volúmenes incluidos, el precio y las condiciones de pago, renovación, cancelación y reembolso.',
   },
   {
     title: 'Configuramos y probamos',
@@ -83,7 +89,9 @@ const steps = [
             Puesta en marcha desde{' '}<strong class="font-semibold">{plan.setup} €</strong>
           </p>
           <p class="mt-1 text-sm text-mist">Pago único, separado de la mensualidad. Impuestos no incluidos.</p>
-          <p class="mt-4 text-base font-semibold text-brand-deep">Alcance y límites de uso concretados en la propuesta.</p>
+          <p class="mt-5 text-base font-semibold text-ink">{plan.limits}</p>
+          <p class="mt-1 text-sm text-mist">{plan.limitsNote}</p>
+          <p class="mt-4 text-base font-semibold text-brand-deep">Alcance y volumen incluido concretados en la propuesta.</p>
 
           <ul class="my-8 space-y-4 border-t border-ink/12 pt-7">
             {plan.features.map((feature) => (
@@ -96,7 +104,7 @@ const steps = [
             ))}
           </ul>
           <a
-            href="#contacto"
+            href={`#contacto?plan=${plan.planKey}`}
             class:list={[
               'mt-auto block rounded-full px-5 py-3.5 text-center font-semibold transition-colors',
               plan.calendar
@@ -123,11 +131,15 @@ const steps = [
       <div>
         <h3 class="font-display text-xl font-semibold">Consumo y costes adicionales</h3>
         <p class="mt-3 text-base leading-relaxed text-mist">
-          Los límites de uso y cualquier coste adicional se concretan en la propuesta.
-          No hay cargos automáticos por excedente ni se cuentan conversaciones para
-          facturarlas por separado. Los posibles cargos de Meta o de otros proveedores se
-          repercuten a coste y las integraciones a medida se desglosan aparte. WhatsApp
-          requiere una cuenta y un número aptos para su conexión. Todo el detalle, en las{' '}
+          Cada plan incluye un volumen mensual: 500 conversaciones en Atención y 1.000 conversaciones
+          más 300 operaciones de cita en Atención + Citas. Si el uso supera ese volumen durante dos
+          meses consecutivos, te proponemos ampliar el plan o preparar una solución a
+          medida. No hay cargos automáticos por excedente y el servicio no se interrumpe
+          por este motivo, salvo uso abusivo, riesgo de seguridad o impago. El alcance
+          final y cualquier coste adicional se concretan en la propuesta. Los posibles
+          cargos de Meta o de otros proveedores se repercuten a coste y las integraciones
+          a medida se desglosan aparte. WhatsApp requiere una cuenta y un número aptos
+          para su conexión. Todo el detalle, en las{' '}
           <a href="/legal/condiciones" class="underline underline-offset-3 hover:text-brand-deep">Condiciones del servicio</a>.
         </p>
       </div>

@@ -9,11 +9,17 @@
    * En error se conserva todo lo escrito: el visitante no repite el formulario.
    */
   import { z } from 'zod';
-  import { tick } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { scrollToTarget } from '../lib/scroll';
 
   const CONTACT_ENDPOINT =
     import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? 'https://api.citydent.app/web/contacto';
+
+  const PLANS = [
+    { value: 'atencion', label: 'Atención' },
+    { value: 'citas', label: 'Atención + Citas' },
+    { value: 'indeciso', label: 'Aún no lo he decidido' },
+  ];
 
   const CHANNELS = [
     { value: 'web', label: 'En la web de mi clínica' },
@@ -62,6 +68,7 @@
   let country = $state('');
   let email = $state('');
   let phone = $state('');
+  let plan = $state('');
   let channels = $state('');
   let agendas = $state('');
   let agendasCount = $state('');
@@ -129,6 +136,23 @@
     return false;
   }
 
+  /* El plan llega por enlace (#contacto?plan=atencion) desde los precios o por
+     parámetro al compartir la URL; si no, se elige en los chips. */
+  function planFromLocation() {
+    const fromHash = new URLSearchParams(location.hash.split('?')[1] ?? '');
+    const fromQuery = new URLSearchParams(location.search);
+    const raw = fromHash.get('plan') ?? fromQuery.get('plan') ?? '';
+    return PLANS.some((option) => option.value === raw) ? raw : '';
+  }
+
+  onMount(() => {
+    plan = planFromLocation();
+    window.addEventListener('citydent:plan', (event) => {
+      const value = event.detail;
+      if (PLANS.some((option) => option.value === value)) plan = value;
+    });
+  });
+
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -153,6 +177,7 @@
           country: country.trim(),
           email,
           phone,
+          plan,
           channels,
           agendas,
           agendasCount: wantsAgendas ? agendasCount : '',
@@ -164,7 +189,7 @@
       const data = await res.json();
 
       if (res.ok && data.ok) {
-        name = clinic = country = email = phone = channels = agendas = agendasCount = software = message = '';
+        name = clinic = country = email = phone = plan = channels = agendas = agendasCount = software = message = '';
         await showSuccess();
       } else {
         status = STATUS.ERROR;
@@ -344,6 +369,21 @@
         {/if}
       </div>
     </div>
+
+    <fieldset class="mt-7">
+      <legend class={labelClass}>¿Qué plan te interesa? <span class="font-normal text-mist">(opcional)</span></legend>
+      <div class="flex flex-wrap gap-2">
+        {#each PLANS as option}
+          <label class="{chipClass} {plan === option.value ? chipOn : chipOff}">
+            <input type="radio" name="plan" value={option.value} class="sr-only" bind:group={plan} />
+            {option.label}
+          </label>
+        {/each}
+      </div>
+      <p class={hintClass}>
+        Lo usamos para preparar la propuesta; puedes cambiarlo más adelante.
+      </p>
+    </fieldset>
 
     <fieldset class="mt-7">
       <legend class={labelClass}>¿Dónde quieres usarlo? <span class="font-normal text-mist">(opcional)</span></legend>
