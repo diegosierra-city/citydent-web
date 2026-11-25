@@ -1,9 +1,3 @@
-/**
- * Mercados de precios: España (EUR), Estados Unidos (USD) y Colombia (COP).
- * El país llega del endpoint propio de la API (geo por IP, sin terceros);
- * si no puede determinarse, los precios se muestran en dólares. Ya no hay
- * selector manual: el país se corrige en el formulario de contacto.
- */
 import { countryCode } from './geo';
 
 export type Market = 'es' | 'us' | 'co';
@@ -20,7 +14,20 @@ export function marketForCountry(countryCode: string): Market {
   }
 }
 
+function marketFromBrowser(): Market | null {
+  const region = navigator.language.split('-')[1]?.toUpperCase();
+  if (region === 'CO' || region === 'ES') return marketForCountry(region);
+
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (timeZone === 'America/Bogota') return 'co';
+  if (timeZone === 'Europe/Madrid') return 'es';
+  return null;
+}
+
 export async function detectMarket(): Promise<Market> {
+  const browserMarket = marketFromBrowser();
+  if (browserMarket) return browserMarket;
+
   const code = await countryCode();
   return code ? marketForCountry(code) : 'us';
 }
