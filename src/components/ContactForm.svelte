@@ -11,7 +11,7 @@
   import { z } from 'zod';
   import { onMount, tick } from 'svelte';
   import { scrollToTarget } from '../lib/scroll';
-  import { countryCode, countryName } from '../lib/geo';
+  import { countryName, detectCountryCode } from '../lib/geo';
 
   const CONTACT_ENDPOINT =
     import.meta.env.PUBLIC_CONTACT_ENDPOINT ?? 'https://api.citydent.app/web/contacto';
@@ -152,9 +152,7 @@
       const value = event.detail;
       if (PLANS.some((option) => option.value === value)) plan = value;
     });
-    // El país se sugiere desde la IP; el visitante puede corregirlo y la
-    // propuesta se preparará en la moneda del país que deje escrito.
-    countryCode().then((code) => {
+    detectCountryCode().then((code) => {
       if (code && country.trim() === '') {
         const name = countryName(code);
         if (name) country = name;

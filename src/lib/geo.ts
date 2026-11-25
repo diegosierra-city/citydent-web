@@ -1,8 +1,3 @@
-/**
- * País del visitante desde el endpoint propio de la API (geo por IP, sin
- * terceros). Se consulta una sola vez por página: precios y formulario
- * comparten el resultado.
- */
 const GEO_ENDPOINT = import.meta.env.PUBLIC_GEO_ENDPOINT ?? 'https://api.citydent.app/web/geo';
 
 let cached: string | null | undefined;
@@ -32,4 +27,18 @@ export function countryName(code: string): string | null {
   } catch {
     return null;
   }
+}
+
+function countryCodeFromBrowser(): string | null {
+  const region = navigator.language.split('-')[1]?.toUpperCase();
+  if (region === 'CO' || region === 'ES') return region;
+
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (timeZone === 'America/Bogota') return 'CO';
+  if (timeZone === 'Europe/Madrid') return 'ES';
+  return null;
+}
+
+export async function detectCountryCode(): Promise<string | null> {
+  return countryCodeFromBrowser() ?? countryCode();
 }
