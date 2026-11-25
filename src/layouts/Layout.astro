@@ -290,8 +290,10 @@ const footerLinks = [
     <!-- Inicialización centralizada de scroll suave + ScrollTrigger -->
     <script>
       import { initScroll, scrollToTarget } from '../lib/scroll';
+      import { initMarket } from '../lib/market';
 
       initScroll();
+      initMarket();
 
       /* Navega a un anchor sólo si la sección existe (evita errores en anclas pendientes) */
       const goAnchor = (href: string | null, url?: string): boolean => {

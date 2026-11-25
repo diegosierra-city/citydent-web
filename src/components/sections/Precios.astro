@@ -1,10 +1,23 @@
 ---
+const PRICES = {
+  es: {
+    atencion: { monthly: '149 €', setup: '390 €' },
+    citas: { monthly: '249 €', setup: '690 €' },
+  },
+  us: {
+    atencion: { monthly: '$249', setup: '$499' },
+    citas: { monthly: '$449', setup: '$899' },
+  },
+  co: {
+    atencion: { monthly: '249.000 COP', setup: '690.000 COP' },
+    citas: { monthly: '449.000 COP', setup: '1.190.000 COP' },
+  },
+};
+
 const plans = [
   {
     name: 'Atención',
     description: 'Para responder las consultas habituales de tu clínica.',
-    monthly: 149,
-    setup: 390,
     limits: 'Incluye 500 conversaciones al mes',
     limitsNote: 'Una conversación es cada sesión de chat con al menos un mensaje del paciente; en WhatsApp, una sesión nueva empieza tras 24 horas sin mensajes. Para una clínica, una web y un número de WhatsApp.',
     features: [
@@ -20,8 +33,6 @@ const plans = [
   {
     name: 'Atención + Citas',
     description: 'Para responder consultas y reservar en el calendario de citas.',
-    monthly: 249,
-    setup: 690,
     limits: 'Incluye 1.000 conversaciones y 300 operaciones de cita al mes',
     limitsNote: 'Una operación de cita es una reserva, cambio o cancelación ejecutada con éxito; cada operación cuenta una vez. Para una clínica, una web, un WhatsApp y una agenda conectada.',
     features: [
@@ -82,11 +93,25 @@ const steps = [
           <h3 class="font-display text-2xl font-semibold">{plan.name}</h3>
           <p class="mt-3 max-w-md text-base leading-relaxed text-mist">{plan.description}</p>
           <p class="mt-7 flex flex-wrap items-baseline gap-x-2">
-            <span class="font-display text-5xl font-semibold tracking-tight tabular-nums">{plan.monthly} €</span>
+            <span
+              class="font-display text-5xl font-semibold tracking-tight tabular-nums"
+              data-price-es={PRICES.es[plan.planKey].monthly}
+              data-price-us={PRICES.us[plan.planKey].monthly}
+              data-price-co={PRICES.co[plan.planKey].monthly}
+            >
+              {PRICES.us[plan.planKey].monthly}
+            </span>
             <span class="text-base text-mist">/ mes</span>
           </p>
           <p class="mt-3 text-base text-ink">
-            Puesta en marcha desde{' '}<strong class="font-semibold">{plan.setup} €</strong>
+            Puesta en marcha desde{' '}<strong
+              class="font-semibold"
+              data-price-es={PRICES.es[plan.planKey].setup}
+              data-price-us={PRICES.us[plan.planKey].setup}
+              data-price-co={PRICES.co[plan.planKey].setup}
+            >
+              {PRICES.us[plan.planKey].setup}
+            </strong>
           </p>
           <p class="mt-1 text-sm text-mist">Pago único, separado de la mensualidad. Impuestos no incluidos.</p>
           <p class="mt-5 text-base font-semibold text-ink">{plan.limits}</p>
@@ -181,3 +206,4 @@ const steps = [
     </p>
   </div>
 </section>
+
